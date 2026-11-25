@@ -1,0 +1,96 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-platform
+  main:
+    allow-circular-references: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/orpl?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: root
+      database: 0
+      timeout: 3s
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+  jackson:
+    deserialization:
+      accept-single-value-as-array: true
+    time-zone: Asia/Shanghai
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: "classpath*:/mapper/**/*.xml"
+  configuration:
+    map-underscore-to-camel-case: true
+
+mzlhsc:
+  jwt:
+    token-ttl: 12h
+  auth:
+    exclude-paths:
+      - /admin/employee/login
+      - /user/user/login
+      - /user/user/register
+      - /user/shop/status
+      - /user/category/list
+      - /user/dish/list
+      - /user/setmeal/list
+      - /user/setmeal/dish/**
+      - /user/dining/table/list
+      - /user/dining/scan/**
+      - /v3/api-docs/**
+      - /doc.html
+      - /webjars/**
+      - /swagger-ui/**
+      - /swagger-resources/**
+      - /favicon.ico
+      - /error
+      - /health
+    admin-include-paths:
+      - /admin/**
+    user-include-paths:
+      - /user/**
+      - /addressBook/**
+      - /shopping-cart/**
+  redisson:
+    enabled: true
+  wechat:
+    appid: ${WECHAT_APPID:}
+    secret: ${WECHAT_SECRET:}
+  aliyun:
+    endpoint: ${OSS_ENDPOINT:}
+    bucket-name: ${OSS_BUCKET:}
+    region: ${OSS_REGION:}
+    access-key-id: ${OSS_ACCESS_KEY_ID:}
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+  # 文件存储：auto = OSS 配置齐全走 OSS，否则存本地目录（开发默认 ./uploads）
+  storage:
+    type: ${STORAGE_TYPE:auto}
+    local-dir: ${STORAGE_LOCAL_DIR:./uploads}
+    public-prefix: ${STORAGE_PUBLIC_PREFIX:/uploads}
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+logging:
+  level:
+    root: info
+    com.mzlhsc.orpl: info

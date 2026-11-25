@@ -1,0 +1,175 @@
+.address-page {
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+.address-head {
+  padding: 30rpx 28rpx 14rpx;
+}
+
+.address-sub {
+  margin-top: 8rpx;
+}
+
+.address-body {
+  padding-top: 16rpx;
+}
+
+.notice {
+  margin-bottom: 16rpx;
+  padding: 16rpx 20rpx;
+  border: 1rpx solid #f6d9bd;
+  border-radius: 16rpx;
+  background: #fff7ed;
+  color: #9a5b19;
+  font-size: 22rpx;
+}
+
+.address-item {
+  padding: 22rpx;
+  margin-bottom: 16rpx;
+}
+
+.address-item:active {
+  opacity: 0.88;
+}
+
+.address-item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.address-name {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.address-phone {
+  margin-left: 10rpx;
+  font-size: 23rpx;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.address-labels {
+  display: flex;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.address-full {
+  margin-top: 10rpx;
+  font-size: 23rpx;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.address-actions {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid #f3efe9;
+}
+
+.address-action {
+  font-size: 20rpx;
+  color: #b45309;
+}
+
+.address-action-danger {
+  color: #b23a2f;
+}
+
+.address-select-hint {
+  margin-left: auto;
+  font-size: 21rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.address-empty {
+  padding-top: 120rpx;
+}
+
+.empty-action {
+  margin-top: 26rpx;
+}
+
+.retry-btn {
+  margin-top: 24rpx;
+}
+
+.add-address-bar {
+  padding-top: 14rpx;
+  padding-bottom: calc(14rpx + env(safe-area-inset-bottom));
+}
+
+.edit-address-page {
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
+}
+
+.edit-address-head {
+  padding: 30rpx 28rpx 14rpx;
+}
+
+.edit-address-sub {
+  margin-top: 8rpx;
+}
+
+.edit-address-body {
+  padding-top: 16rpx;
+}
+
+.edit-last-field {
+  margin-bottom: 2rpx;
+}
+
+.region-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #e8e1d9;
+  border-radius: 16rpx;
+  background: #fcfbf9;
+  font-size: 28rpx;
+}
+
+.region-empty {
+  color: #a8abb2;
+}
+
+.field-error {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #c2412d;
+}
+
+.detail-textarea {
+  min-height: 130rpx;
+}
+
+.edit-section-head {
+  margin-top: 28rpx;
+}
+
+.label-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+}
+
+.edit-note {
+  padding: 20rpx 10rpx 30rpx;
+  text-align: center;
+  font-size: 20rpx;
+  color: #9ca3af;
+}
+
+.edit-fixed {
+  padding-top: 14rpx;
+}

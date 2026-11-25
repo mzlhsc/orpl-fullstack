@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1f2937">
+  <title>Order Platform · 管理端</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23e8552d'/%3E%3Cpath d='M20 18h24v6H26v6h14v6H26v10h-6V18z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/app.css">
+  <script src="vendor/qrcode.min.js"></script>
+</head>
+<body>
+  <!-- ==================== 登录页 ==================== -->
+  <section id="login-view" class="login-view">
+    <div class="login-brand">
+      <div class="login-brand-inner">
+        <div class="brand-mark brand-mark-lg">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 9h16l-1.5 10.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5L4 9Z"/>
+            <path d="M8 9V6.5a4 4 0 0 1 8 0V9"/>
+            <path d="M9.5 13.5h5"/>
+          </svg>
+        </div>
+        <h1>Order Platform</h1>
+        <p class="login-brand-title">点餐 · 堂食 一体化经营后台</p>
+        <p class="login-brand-desc">订单处理、菜品与套餐维护、桌台预约、堂食会话和数据统计，全部集中在一个管理端。</p>
+        <ul class="login-brand-points">
+          <li><span class="dot"></span>订单接单、支付、完成与拒单全流程</li>
+          <li><span class="dot"></span>桌台二维码开台与转台并桌</li>
+          <li><span class="dot"></span>营业额、用户、订单、销量多维统计</li>
+        </ul>
+      </div>
+      <div class="login-brand-glow"></div>
+    </div>
+    <div class="login-panel">
+      <div class="login-card">
+        <div class="login-card-head">
+          <div class="brand-mark">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 9h16l-1.5 10.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5L4 9Z"/>
+              <path d="M8 9V6.5a4 4 0 0 1 8 0V9"/>
+            </svg>
+          </div>
+          <div>
+            <h2>商家登录</h2>
+            <p>请输入员工账号进入管理端</p>
+          </div>
+        </div>
+        <form id="login-form" class="login-form" autocomplete="off">
+          <label class="field">
+            <span class="field-label">用户名</span>
+            <span class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>
+              </svg>
+              <input id="login-username" name="username" type="text" placeholder="请输入用户名" autocomplete="username" required>
+            </span>
+          </label>
+          <label class="field">
+            <span class="field-label">密码</span>
+            <span class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="5" y="10.5" width="14" height="9" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
+              </svg>
+              <input id="login-password" name="password" type="password" placeholder="请输入密码" autocomplete="current-password" required>
+            </span>
+          </label>
+          <p id="login-error" class="login-error" hidden></p>
+          <button id="login-btn" class="btn btn-primary btn-block" type="submit">
+            <span class="btn-label">登 录</span>
+            <span class="btn-spinner" hidden></span>
+          </button>
+        </form>
+        <div class="login-hint">
+          <span>默认开发账号</span>
+          <code>admin / 123456</code>
+        </div>
+      </div>
+      <p class="login-foot">Order Platform 管理端 · 接口由 nginx 反向代理至 <code>/admin</code></p>
+    </div>
+  </section>
+
+  <!-- ==================== 应用主体 ==================== -->
+  <div id="app-view" class="app-view" hidden>
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-head">
+        <div class="brand-mark brand-mark-sm">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 9h16l-1.5 10.5a2 2 0 0 1-2 1.5h-9a2 2 0 0 1-2-1.5L4 9Z"/>
+            <path d="M8 9V6.5a4 4 0 0 1 8 0V9"/>
+          </svg>
+        </div>
+        <div class="sidebar-brand">
+          <strong>Order Platform</strong>
+          <span>经营管理后台</span>
+        </div>
+        <button id="sidebar-close" class="icon-btn sidebar-close" type="button" aria-label="收起菜单">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <nav id="sidebar-nav" class="sidebar-nav"></nav>
+      <div class="sidebar-foot">
+        <div class="shop-status-line">
+          <span class="status-dot" id="side-shop-dot"></span>
+          <span id="side-shop-text">店铺状态读取中</span>
+        </div>
+        <span class="sidebar-version">v1.0 · nginx 部署版</span>
+      </div>
+    </aside>
+    <div id="sidebar-mask" class="sidebar-mask" hidden></div>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebar-open" class="icon-btn menu-btn" type="button" aria-label="展开菜单">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <div class="page-heading">
+            <h1 id="page-title">工作台</h1>
+            <p id="page-subtitle">今日经营概览</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button id="shop-toggle" class="shop-pill" type="button" title="切换营业状态">
+            <span class="status-dot"></span>
+            <span class="shop-pill-text">营业中</span>
+          </button>
+          <div class="user-chip" id="user-chip">
+            <span class="avatar" id="user-avatar">管</span>
+            <span class="user-meta">
+              <strong id="user-name">管理员</strong>
+              <small id="user-account">admin</small>
+            </span>
+          </div>
+          <button id="logout-btn" class="btn btn-ghost btn-sm" type="button">退出</button>
+        </div>
+      </header>
+      <main id="page" class="page"></main>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-root"></div>
+  <div id="modal-root" class="modal-root"></div>
+  <div id="loading" class="global-loading" hidden>
+    <div class="loading-ring"></div>
+    <span id="loading-text">加载中…</span>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

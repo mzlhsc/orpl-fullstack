@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzlhsc.orpl.setmeal.mapper.SetmealMapper">
+
+    <!-- 分页由 MyBatis-Plus 分页拦截器处理，此处不写 limit -->
+    <select id="pageQuery" resultType="com.mzlhsc.orpl.setmeal.domain.vo.SetmealVO">
+        select s.* , c.name as categoryName from setmeal s left outer join category c on s.category_id = c.id
+        <where><if test="dto.name != null">
+            and s.name like concat('%',#{dto.name},'%')
+        </if>
+            <if test="dto.categoryId != null">
+                and s.category_id = #{dto.categoryId}
+            </if>
+            <if test="dto.status != null">
+                and s.status = #{dto.status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 按状态统计套餐数量（工作台套餐总览） -->
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from setmeal
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

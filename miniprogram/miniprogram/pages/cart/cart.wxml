@@ -1,0 +1,256 @@
+<view class="page cart-page {{mode === 'dining' ? 'cart-dining-page' : ''}}">
+  <view class="hero cart-hero">
+    <view class="hero-inner">
+      <view class="brand-line">
+        <view class="brand"><view class="brand-dot"></view>{{mode === 'dining' ? 'TABLE ORDER' : 'YOUR ORDER'}}</view>
+        <view wx:if="{{items.length > 0}}" class="cart-clear" bindtap="onClear">清空</view>
+      </view>
+      <view class="hero-title">{{mode === 'dining' ? '本桌下单' : '购物车'}}</view>
+      <view class="hero-subtitle">
+        {{mode === 'dining' ? '当前订单 + 本次加菜 · ' + session.tableName : '外卖配送 · 现点现做'}}
+      </view>
+    </view>
+  </view>
+
+  <view class="page-pad cart-body">
+    <view wx:if="{{mode === 'dining' && session}}" class="dining-session-banner" bindtap="goSession">
+      <view class="dining-session-icon">桌</view>
+      <view class="grow">
+        <view class="dining-session-title">{{session.tableName}} · {{sessionStatusText}}</view>
+        <view class="dining-session-sub">
+          {{session.memberCount || 0}} 人同桌 · 当前订单已点 ¥{{sessionTotalText}}
+        </view>
+      </view>
+      <view class="chev"></view>
+    </view>
+
+    <view wx:if="{{mode === 'dining' && session && session.status !== 1}}" class="notice notice-warm">
+      本桌已申请结账，订单可查看，但不能继续加菜或下单。
+    </view>
+    <view wx:if="{{!shopOpen}}" class="notice notice-warm">门店已打烊，暂不可提交订单。</view>
+
+    <view wx:if="{{loading}}" class="loading-line">正在读取当前订单…</view>
+
+    <block wx:elif="{{mode === 'dining'}}">
+      <view class="current-order-section">
+        <view class="section-head current-order-head">
+          <view>
+            <view class="section-title">当前订单</view>
+            <view class="section-sub">
+              {{hasSubmittedOrder ? orderRoundCount + ' 次下单 · 已点 ¥' + sessionTotalText : '还没有提交过菜品'}}
+            </view>
+          </view>
+          <view class="current-order-no">#{{currentOrderNo || '尚未下单'}}</view>
+        </view>
+
+        <view class="card current-order-card">
+          <view wx:if="{{orderRounds.length === 0}}" class="current-order-empty">
+            <view class="current-order-empty-title">本桌还没有下过单</view>
+            <view class="current-order-empty-text">选好本次菜品，确认下单后会生成当前订单，后续加餐都并入这一单。</view>
+          </view>
+
+          <view wx:for="{{orderRounds}}" wx:key="round" class="order-round-block">
+            <view class="order-round-head">
+              <view>
+                <view class="order-round-label">{{item.label}}</view>
+                <view class="order-round-time">{{item.timeText}}</view>
+                <view
+                  wx:if="{{item.orderNumber && item.orderNumber !== currentOrderNo}}"
+                  class="order-round-original"
+                >原订单 {{item.orderNumber}}</view>
+              </view>
+              <view class="order-round-amount">¥{{item.amountText}}</view>
+            </view>
+            <view
+              wx:for="{{item.items}}"
+              wx:for-item="dish"
+              wx:key="id"
+              class="order-round-item"
+            >
+              <view class="thumb-sm order-round-thumb">
+                <image class="thumb-img" src="{{dish.imageSrc}}" mode="aspectFill" />
+              </view>
+              <view class="grow">
+                <view class="order-round-name">{{dish.name}}</view>
+                <view wx:if="{{dish.flavorText}}" class="order-round-flavor">{{dish.flavorText}}</view>
+              </view>
+              <view class="order-round-right">
+                <view class="order-round-qty">×{{dish.number}}</view>
+                <view class="order-round-line">¥{{dish.lineText}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="cart-list-head">
+        <view>
+          <view class="section-title">{{hasSubmittedOrder ? '本次加菜' : '本次下单'}}</view>
+          <view class="section-sub">共 {{count}} 件 · 小计 ¥{{subtotalText}}</view>
+        </view>
+        <view wx:if="{{items.length > 0}}" class="tiny muted">长按商品可移出</view>
+      </view>
+
+      <block wx:if="{{items.length > 0}}">
+        <view
+          wx:for="{{items}}"
+          wx:key="id"
+          class="cart-item card"
+          data-id="{{item.id}}"
+          bindlongpress="onRemoveItem"
+        >
+          <view class="thumb cart-thumb">
+            <image
+              class="thumb-img"
+              src="{{item.imageSrc}}"
+              mode="aspectFill"
+              data-id="{{item.id}}"
+              binderror="onItemImageError"
+            />
+          </view>
+          <view class="cart-item-main grow">
+            <view class="cart-item-top">
+              <view class="cart-item-name">{{item.name}}</view>
+              <view class="cart-item-line">¥{{item.lineText}}</view>
+            </view>
+            <view wx:if="{{item.flavorText}}" class="cart-item-flavor">{{item.flavorText}}</view>
+            <view class="cart-item-bottom">
+              <view class="cart-unit">¥{{item.unitText}} / 份</view>
+              <view class="stepper">
+                <button
+                  class="step-btn {{busyId === item.id ? 'step-btn-busy' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="onMinus"
+                >−</button>
+                <view class="step-value">{{item.number}}</view>
+                <button
+                  class="step-btn step-plus {{busyId === item.id ? 'step-btn-busy' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="onPlus"
+                >+</button>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="card summary-card">
+          <view class="summary-row">
+            <view class="summary-label">本次小计</view>
+            <view class="summary-value">¥{{subtotalText}}</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">堂食服务</view>
+            <view class="summary-value">¥{{packText}}</view>
+          </view>
+          <view class="divider summary-divider"></view>
+          <view class="summary-row summary-total">
+            <view class="summary-label">本次合计</view>
+            <view class="summary-amount"><text class="price-symbol">¥</text>{{totalText}}</view>
+          </view>
+        </view>
+
+        <view class="cart-note">
+          {{hasSubmittedOrder ? '确认加餐后，本次菜品会并入当前订单号，不会生成新订单。' : '确认下单后会生成一笔堂食订单，后续加餐都并入这一单。'}}
+        </view>
+      </block>
+
+      <view wx:else class="card cart-empty-inline">
+        <view>
+          <view class="cart-empty-inline-title">{{hasSubmittedOrder ? '本次还没有加菜' : '本次还没有选菜'}}</view>
+          <view class="cart-empty-inline-text">去菜单挑几道喜欢的，再回来{{hasSubmittedOrder ? '加餐' : '下单'}}。</view>
+        </view>
+        <button class="btn btn-soft btn-sm" bindtap="goMenu">去点餐</button>
+      </view>
+    </block>
+
+    <block wx:else>
+      <block wx:if="{{items.length === 0}}">
+        <view class="empty cart-empty">
+          <view class="empty-art"></view>
+          <view class="empty-title">购物车还是空的</view>
+          <view class="empty-text">去菜单挑几道喜欢的，热气马上就上桌。</view>
+          <button class="btn btn-primary btn-sm empty-action" bindtap="goMenu">去点餐</button>
+        </view>
+      </block>
+
+      <block wx:else>
+        <view class="cart-list-head">
+          <view class="section-title">已选 {{count}} 件</view>
+          <view class="tiny muted">长按商品可移出</view>
+        </view>
+
+        <view
+          wx:for="{{items}}"
+          wx:key="id"
+          class="cart-item card"
+          data-id="{{item.id}}"
+          bindlongpress="onRemoveItem"
+        >
+          <view class="thumb cart-thumb">
+            <image
+              class="thumb-img"
+              src="{{item.imageSrc}}"
+              mode="aspectFill"
+              data-id="{{item.id}}"
+              binderror="onItemImageError"
+            />
+          </view>
+          <view class="cart-item-main grow">
+            <view class="cart-item-top">
+              <view class="cart-item-name">{{item.name}}</view>
+              <view class="cart-item-line">¥{{item.lineText}}</view>
+            </view>
+            <view wx:if="{{item.flavorText}}" class="cart-item-flavor">{{item.flavorText}}</view>
+            <view class="cart-item-bottom">
+              <view class="cart-unit">¥{{item.unitText}} / 份</view>
+              <view class="stepper">
+                <button
+                  class="step-btn {{busyId === item.id ? 'step-btn-busy' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="onMinus"
+                >−</button>
+                <view class="step-value">{{item.number}}</view>
+                <button
+                  class="step-btn step-plus {{busyId === item.id ? 'step-btn-busy' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="onPlus"
+                >+</button>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="card summary-card">
+          <view class="summary-row">
+            <view class="summary-label">商品小计</view>
+            <view class="summary-value">¥{{subtotalText}}</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">打包费</view>
+            <view class="summary-value">¥{{packText}}</view>
+          </view>
+          <view class="divider summary-divider"></view>
+          <view class="summary-row summary-total">
+            <view class="summary-label">合计</view>
+            <view class="summary-amount"><text class="price-symbol">¥</text>{{totalText}}</view>
+          </view>
+        </view>
+
+        <view class="cart-note">当前项目未接入微信支付，提交后订单直接进入待接单。</view>
+      </block>
+    </block>
+  </view>
+
+  <view wx:if="{{items.length > 0}}" class="fixed-bottom cart-fixed">
+    <view class="cart-fixed-inner">
+      <view class="cart-fixed-total">
+        <view class="tiny muted">{{mode === 'dining' ? '本次合计' : '合计'}}</view>
+        <view class="cart-fixed-money"><text class="price-symbol">¥</text>{{totalText}}</view>
+      </view>
+      <button
+        class="btn checkout-btn {{canSubmit ? 'btn-primary' : 'btn-disabled'}}"
+        bindtap="onCheckout"
+      >{{checkoutText}}</button>
+    </view>
+  </view>
+</view>

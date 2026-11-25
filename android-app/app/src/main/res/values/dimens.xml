@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="page_pad">16dp</dimen>
+    <dimen name="card_radius">14dp</dimen>
+    <dimen name="card_pad">16dp</dimen>
+    <dimen name="gap">12dp</dimen>
+    <dimen name="gap_sm">8dp</dimen>
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="input_height">46dp</dimen>
+    <dimen name="button_height">44dp</dimen>
+    <dimen name="icon_sm">16dp</dimen>
+    <dimen name="icon_md">20dp</dimen>
+    <dimen name="icon_badge">34dp</dimen>
+</resources>

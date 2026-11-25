@@ -1,0 +1,59 @@
+{
+  "pages": [
+    "pages/menu/menu",
+    "pages/orders/orders",
+    "pages/dining/dining",
+    "pages/profile/profile",
+    "pages/cart/cart",
+    "pages/order-confirm/order-confirm",
+    "pages/order-detail/order-detail",
+    "pages/dining-session/dining-session",
+    "pages/reservation/reservation",
+    "pages/address/list",
+    "pages/address/edit"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1f2937",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "Order Platform",
+    "backgroundColor": "#f7f4ef",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#8a8f98",
+    "selectedColor": "#e8552d",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/menu/menu",
+        "text": "点餐",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/orders/orders",
+        "text": "订单",
+        "iconPath": "assets/tab/orders.png",
+        "selectedIconPath": "assets/tab/orders-active.png"
+      },
+      {
+        "pagePath": "pages/dining/dining",
+        "text": "堂食",
+        "iconPath": "assets/tab/dining.png",
+        "selectedIconPath": "assets/tab/dining-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/tab/profile.png",
+        "selectedIconPath": "assets/tab/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

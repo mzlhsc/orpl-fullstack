@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/card"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="6dp"
+    android:paddingEnd="12dp">
+
+    <ImageView
+        android:id="@+id/toolbar_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_back"
+        android:padding="10dp"
+        android:src="@drawable/ic_back" />
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        style="@style/Text.Orpl.Section"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="17sp"
+        android:text="标题" />
+
+    <TextView
+        android:id="@+id/toolbar_action"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textColor="@color/brand_strong"
+        android:textSize="13sp"
+        android:visibility="gone"
+        android:text="操作" />
+</LinearLayout>

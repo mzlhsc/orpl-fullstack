@@ -1,0 +1,127 @@
+<view class="page page-tab profile-page">
+  <view class="hero profile-hero">
+    <view class="hero-inner">
+      <view class="brand-line">
+        <view class="brand"><view class="brand-dot"></view>MEMBER SPACE</view>
+        <view class="pill {{shopOpen ? 'pill-open' : 'pill-close'}}">{{shopOpen ? '门店营业中' : '门店已打烊'}}</view>
+      </view>
+
+      <view class="profile-row">
+        <view class="profile-avatar">{{avatarText}}</view>
+        <view class="grow">
+          <view class="profile-name">{{displayName}}</view>
+          <view class="profile-meta">{{userIdText}} · {{loginModeText}}</view>
+        </view>
+      </view>
+
+      <view class="profile-stats">
+        <view class="profile-stat" bindtap="onAddresses">
+          <view class="profile-stat-value">{{addressCount}}</view>
+          <view class="profile-stat-label">收货地址</view>
+        </view>
+        <view class="profile-stat" bindtap="onOrders">
+          <view class="profile-stat-value">{{orderCount}}</view>
+          <view class="profile-stat-label">我的订单</view>
+        </view>
+        <view class="profile-stat" bindtap="onReservations">
+          <view class="profile-stat-value">{{reservationCount}}</view>
+          <view class="profile-stat-label">待确认预约</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="page-pad profile-body">
+    <view wx:if="{{loading && !initialized}}" class="loading-line">正在读取个人中心…</view>
+
+    <view wx:if="{{hasActiveSession}}" class="active-profile-card" bindtap="onActiveSession">
+      <view class="active-profile-icon">桌</view>
+      <view class="grow">
+        <view class="active-profile-title">正在进行中的堂食</view>
+        <view class="active-profile-sub">{{activeSessionText}}</view>
+      </view>
+      <view class="chev active-profile-chev"></view>
+    </view>
+
+    <view class="section-head profile-section-head">
+      <view class="section-title">常用服务</view>
+    </view>
+    <view class="card service-card">
+      <view class="service-row" bindtap="onAddresses">
+        <view class="service-icon service-icon-orange">址</view>
+        <view class="grow">
+          <view class="service-title">收货地址</view>
+          <view class="service-sub">{{addressCount}} 个已保存地址</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+      <view class="service-row" bindtap="onOrders">
+        <view class="service-icon service-icon-dark">单</view>
+        <view class="grow">
+          <view class="service-title">我的订单</view>
+          <view class="service-sub">查看外卖进度与历史</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+      <view class="service-row" bindtap="onReserve">
+        <view class="service-icon service-icon-green">预</view>
+        <view class="grow">
+          <view class="service-title">预约桌台</view>
+          <view class="service-sub">提前留一张桌，到店更从容</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+      <view class="service-row" bindtap="onActiveSession">
+        <view class="service-icon service-icon-warm">桌</view>
+        <view class="grow">
+          <view class="service-title">进行中的堂食</view>
+          <view class="service-sub">{{hasActiveSession ? activeSessionText : '扫码开台或加入同桌'}}</view>
+        </view>
+        <view class="chev"></view>
+      </view>
+    </view>
+
+    <view class="section-head profile-section-head">
+      <view class="section-title">账号与环境</view>
+    </view>
+    <view class="card account-card">
+      <view class="account-row">
+        <view class="account-label">用户 ID</view>
+        <view class="account-value">{{userIdText || '未登录'}}</view>
+      </view>
+      <view class="account-row">
+        <view class="account-label">openid</view>
+        <view class="account-value account-mono">{{openidMasked || '—'}}</view>
+      </view>
+      <view class="account-row">
+        <view class="account-label">接口地址</view>
+        <view class="account-value account-mono account-wrap">{{apiBase}}</view>
+      </view>
+      <view class="account-row">
+        <view class="account-label">登录模式</view>
+        <view class="account-value">{{loginModeText}}</view>
+      </view>
+    </view>
+
+    <view class="section-head profile-section-head">
+      <view class="section-title">门店与设置</view>
+    </view>
+    <view class="card setting-card">
+      <view class="setting-row" bindtap="onContact">
+        <view class="grow">联系门店</view>
+        <view class="cell-value">{{shopPhone}} <view class="chev"></view></view>
+      </view>
+      <view class="setting-row" bindtap="onRelogin">
+        <view class="grow">重新登录</view>
+        <view class="cell-value">刷新登录态 <view class="chev"></view></view>
+      </view>
+      <view class="setting-row" bindtap="onAbout">
+        <view class="grow">关于小程序</view>
+        <view class="cell-value">{{version}} <view class="chev"></view></view>
+      </view>
+    </view>
+
+    <view class="profile-logout" bindtap="onLogout">退出登录</view>
+    <view class="profile-footer">ORDER PLATFORM · 顾客端小程序</view>
+  </view>
+</view>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="20dp">
+
+    <EditText
+        android:id="@+id/et_server_url"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="http://10.0.2.2:8080/admin/"
+        android:inputType="textUri"
+        android:maxLines="1" />
+
+    <TextView
+        style="@style/Text.Orpl.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="直连后端填 http://IP:8080/admin/；走 nginx 填 http://IP/api/。真机需与电脑同一局域网。" />
+</LinearLayout>

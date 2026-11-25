@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mzlhsc.orpl.order.mapper.OrdersMapper">
+
+    <!-- 物理分页由 MyBatis-Plus 的 PaginationInnerInterceptor 完成，此处不写 limit -->
+    <select id="pageQuery" resultType="com.mzlhsc.orpl.order.domain.po.Orders">
+        select * from orders
+        <where>
+            <if test="dto.number != null and dto.number != ''">
+                and number like concat('%',#{dto.number},'%')
+            </if>
+            <if test="dto.phone != null and dto.phone != ''">
+                and phone like concat('%',#{dto.phone},'%')
+            </if>
+            <if test="dto.userId != null">
+                and user_id = #{dto.userId}
+            </if>
+            <if test="dto.status != null">
+                and status = #{dto.status}
+            </if>
+            <if test="dto.beginTime != null">
+                and order_time &gt;= #{dto.beginTime}
+            </if>
+            <if test="dto.endTime != null">
+                and order_time &lt;= #{dto.endTime}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
+
+    <!-- 按时间段/状态统计订单数量（工作台、报表模块使用） -->
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from orders
+        <where>
+            <if test="begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 按时间段/状态统计订单金额合计（营业额） -->
+    <select id="sumByMap" resultType="java.math.BigDecimal">
+        select sum(amount) from orders
+        <where>
+            <if test="begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt; #{end}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <!-- 按日统计营业额（只统计已完成订单），date/amount 对应 DateAmountDTO -->
+    <select id="sumAmountByDate" resultType="com.mzlhsc.orpl.order.domain.dto.DateAmountDTO">
+        select date_format(order_time, '%Y-%m-%d') as date, sum(amount) as amount
+        from orders
+        where status = 5
+        <if test="begin != null">
+            and order_time &gt;= #{begin}
+        </if>
+        <if test="end != null">
+            and order_time &lt; #{end}
+        </if>
+        group by date_format(order_time, '%Y-%m-%d')
+        order by date
+    </select>
+
+    <!-- 销量排名 top10（limit 0,10 是业务上的前10名，非分页插件语法） -->
+    <select id="getSalesTop10" resultType="com.mzlhsc.orpl.order.domain.dto.GoodsSalesDTO">
+        select od.name, sum(od.number) number
+        from order_detail od, orders o
+        where od.order_id = o.id and o.status = 5
+        <if test="begin != null">
+            and o.order_time &gt;= #{begin}
+        </if>
+        <if test="end != null">
+            and o.order_time &lt; #{end}
+        </if>
+        group by od.name
+        order by number desc
+        limit 0,10
+    </select>
+</mapper>
+

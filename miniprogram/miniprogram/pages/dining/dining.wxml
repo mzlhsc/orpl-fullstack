@@ -1,0 +1,151 @@
+<view class="page page-tab dining-page">
+  <view class="hero dining-hero">
+    <view class="hero-inner">
+      <view class="brand-line">
+        <view class="brand"><view class="brand-dot"></view>TABLE SERVICE</view>
+        <view class="pill {{shopOpen ? 'pill-open' : 'pill-close'}}">{{shopOpen ? '营业中' : '已打烊'}}</view>
+      </view>
+      <view class="hero-title">堂食 · 桌边点餐</view>
+      <view class="hero-subtitle">扫码开台，和同桌一起点菜、一起结账。</view>
+
+      <view class="scan-panel">
+        <button class="scan-main" bindtap="onScan">
+          <view class="scan-glyph">
+            <view class="scan-corner scan-corner-tl"></view>
+            <view class="scan-corner scan-corner-tr"></view>
+            <view class="scan-corner scan-corner-bl"></view>
+            <view class="scan-corner scan-corner-br"></view>
+          </view>
+          <view>
+            <view class="scan-main-title">扫码识别桌台</view>
+            <view class="scan-main-sub">桌贴二维码 / 小程序码</view>
+          </view>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view class="page-pad dining-body">
+    <view wx:if="{{loading}}" class="loading-line">正在查看桌台状态…</view>
+
+    <block wx:elif="{{error}}">
+      <view class="empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">堂食信息没加载出来</view>
+        <view class="empty-text">{{error}}</view>
+        <button class="btn btn-primary btn-sm retry-btn" bindtap="onRetry">重新加载</button>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view wx:if="{{activeSession}}" class="card active-card" bindtap="onSessionTap">
+        <view class="active-card-top">
+          <view class="active-table">
+            <view class="active-table-icon">桌</view>
+            <view>
+              <view class="active-table-name">{{activeSession.tableName}}</view>
+              <view class="active-table-no">{{activeSession.sessionNo}}</view>
+            </view>
+          </view>
+          <view class="tag tag-{{activeSession.statusTone}}">{{activeSession.statusText}}</view>
+        </view>
+        <view class="active-metrics">
+          <view class="active-metric">
+            <view class="active-metric-value">¥{{activeSession.totalText}}</view>
+            <view class="active-metric-label">已点金额</view>
+          </view>
+          <view class="active-metric">
+            <view class="active-metric-value">{{activeSession.guestCount || activeSession.memberCount || 1}}</view>
+            <view class="active-metric-label">就餐人数</view>
+          </view>
+          <view class="active-metric">
+            <view class="active-metric-value">¥{{activeSession.cartAmountText}}</view>
+            <view class="active-metric-label">待下单</view>
+          </view>
+        </view>
+        <view class="active-actions">
+          <button class="btn btn-soft btn-sm active-btn" catchtap="onContinueOrder">继续加菜</button>
+          <button class="btn btn-dark btn-sm active-btn" catchtap="onSessionTap">进入会话</button>
+        </view>
+      </view>
+
+      <view wx:else class="not-seated card">
+        <view class="not-seated-art"></view>
+        <view class="grow">
+          <view class="not-seated-title">还没有进行中的堂食</view>
+          <view class="not-seated-text">请扫描本桌桌贴二维码开台。</view>
+        </view>
+        <button class="btn btn-primary btn-sm not-seated-btn" bindtap="onScan">去扫码</button>
+      </view>
+
+      <view class="section-head dining-section-head reserve-head">
+        <view>
+          <view class="section-title">我的预约</view>
+          <view class="section-sub">到店前先留一张桌</view>
+        </view>
+        <button class="btn btn-soft btn-xs" bindtap="onReserve">去预约</button>
+      </view>
+
+      <view wx:if="{{reservations.length === 0}}" class="reserve-empty card">
+        <view class="grow">
+          <view class="reserve-empty-title">还没有桌台预约</view>
+          <view class="reserve-empty-text">选一张桌台，留好到店时间。</view>
+        </view>
+        <view class="reserve-empty-arrow" bindtap="onReserve">›</view>
+      </view>
+
+      <view wx:else>
+        <view wx:for="{{reservations}}" wx:key="id" class="reservation-card card">
+          <view class="reservation-top">
+            <view class="reservation-table">{{item.tableName}}</view>
+            <view class="tag tag-{{item.statusTone}}">{{item.statusText}}</view>
+          </view>
+          <view class="reservation-time">{{item.timeText}} · {{item.guestCount}} 人</view>
+          <view class="reservation-meta">{{item.contactName}} {{item.contactPhone}}<text wx:if="{{item.remark}}"> · {{item.remark}}</text></view>
+          <button
+            wx:if="{{item.canCancel}}"
+            class="btn btn-ghost btn-xs reservation-cancel"
+            data-id="{{item.id}}"
+            catchtap="onCancelReservation"
+          >取消预约</button>
+        </view>
+      </view>
+
+      <view class="dining-note">
+        每位同桌成员都能加菜；结账可由同桌发起，AA 支付按未支付人数平摊。
+      </view>
+    </block>
+  </view>
+
+  <view wx:if="{{showOpen}}" class="sheet-mask" bindtap="onCloseOpen"></view>
+  <view wx:if="{{showOpen}}" class="sheet open-sheet" catchtap="noop">
+    <view class="sheet-handle"></view>
+    <view class="sheet-head">
+      <view>
+        <view class="sheet-title">开台 · {{selectedTable.name}}</view>
+        <view class="sheet-sub">{{selectedTable.area || '门店'}} · {{selectedTable.seatsText}}，请确认就餐人数</view>
+      </view>
+      <view class="sheet-close" bindtap="onCloseOpen">×</view>
+    </view>
+
+    <view class="open-row">
+      <view class="open-label">就餐人数</view>
+      <view class="open-stepper">
+        <button class="open-step" bindtap="onGuestMinus">−</button>
+        <view class="open-count">{{guestCount}}</view>
+        <button class="open-step open-step-plus" bindtap="onGuestPlus">+</button>
+      </view>
+    </view>
+    <view class="field">
+      <view class="field-label">我的同桌昵称</view>
+      <input class="field-input" value="{{nickname}}" maxlength="12" bindinput="onNicknameInput" placeholder="例如：小林" placeholder-class="placeholder" />
+    </view>
+    <view class="field">
+      <view class="field-label">备注 <text class="tiny muted">选填</text></view>
+      <input class="field-input" value="{{openRemark}}" maxlength="30" bindinput="onOpenRemarkInput" placeholder="例如：有小朋友、靠窗" placeholder-class="placeholder" />
+    </view>
+    <button class="btn btn-primary btn-block open-submit" bindtap="onOpenConfirm">
+      {{openSubmitting ? '开台中…' : '确认开台'}}
+    </button>
+  </view>
+</view>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="28dp">
+
+        <FrameLayout
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:background="@drawable/bg_mark">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_shop_white" />
+        </FrameLayout>
+
+        <TextView
+            style="@style/Text.Orpl.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/login_title"
+            android:textSize="24sp" />
+
+        <TextView
+            style="@style/Text.Orpl.Muted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/login_sub" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Orpl.Card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    style="@style/Text.Orpl.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_username"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/et_username"
+                    style="@style/Widget.Orpl.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:layout_marginTop="7dp"
+                    android:autofillHints="username"
+                    android:hint="请输入用户名"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+                <TextView
+                    style="@style/Text.Orpl.Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/login_password"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/et_password"
+                    style="@style/Widget.Orpl.Input"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:layout_marginTop="7dp"
+                    android:autofillHints="password"
+                    android:hint="请输入密码"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:id="@+id/tv_toggle_server"
+                    style="@style/Text.Orpl.Muted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/login_advanced"
+                    android:textColor="@color/brand_strong" />
+
+                <LinearLayout
+                    android:id="@+id/server_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/et_server"
+                        style="@style/Widget.Orpl.Input"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/input_height"
+                        android:hint="http://10.0.2.2:8080/admin/"
+                        android:inputType="textUri"
+                        android:maxLines="1" />
+
+                    <TextView
+                        style="@style/Text.Orpl.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="@string/login_server_hint" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_error"
+                    style="@style/Text.Orpl.Muted"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_tag_danger"
+                    android:paddingStart="10dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="@color/danger"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_login"
+                    style="@style/Widget.Orpl.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="18dp"
+                    android:text="@string/login_action" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            style="@style/Text.Orpl.Label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:text="order-platform · 管理端 v1.0.0" />
+    </LinearLayout>
+</ScrollView>

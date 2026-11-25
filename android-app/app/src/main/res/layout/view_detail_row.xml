@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="7dp"
+    android:paddingBottom="7dp">
+
+    <TextView
+        android:id="@+id/row_label"
+        style="@style/Text.Orpl.Muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="标签" />
+
+    <TextView
+        android:id="@+id/row_value"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:text="—"
+        android:textSize="13sp" />
+</LinearLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_mini_stat"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_dish_name"
+            style="@style/Text.Orpl.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="菜品"
+            android:textColor="@color/ink"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_dish_price"
+            style="@style/Text.Orpl.Muted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="¥0.00" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_minus"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:text="−"
+        android:textColor="@color/ink_2"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_copies"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/ink"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/btn_plus"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:text="＋"
+        android:textColor="@color/ink_2"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/btn_remove"
+        style="@style/Text.Orpl.Label"
+        android:layout_width="36dp"
+        android:layout_height="30dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:text="删"
+        android:textColor="@color/danger" />
+</LinearLayout>

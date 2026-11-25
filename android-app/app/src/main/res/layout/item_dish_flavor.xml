@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/et_flavor_name"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_weight="1"
+        android:hint="口味名，如甜度"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/et_flavor_value"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1.4"
+        android:hint="值，逗号分隔：无糖,少糖"
+        android:inputType="text"
+        android:maxLines="1"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/btn_remove_flavor"
+        style="@style/Text.Orpl.Label"
+        android:layout_width="36dp"
+        android:layout_height="42dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
+        android:text="删"
+        android:textColor="@color/danger" />
+</LinearLayout>

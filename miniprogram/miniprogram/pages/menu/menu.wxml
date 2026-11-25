@@ -1,0 +1,369 @@
+<view class="page page-tab menu-page">
+  <view class="hero menu-hero">
+    <view class="hero-inner">
+      <view class="brand-line">
+        <view class="brand"><view class="brand-dot"></view>ORDER PLATFORM</view>
+        <view class="pill {{shopOpen ? 'pill-open' : 'pill-close'}}">
+          {{shopOpen ? '营业中' : '已打烊'}}
+        </view>
+      </view>
+
+      <view class="menu-heading">
+        <view>
+          <view class="menu-title">今日点单</view>
+          <view class="menu-sub">现点现做 · 外卖与堂食都能点</view>
+        </view>
+        <view wx:if="{{activeSession}}" class="menu-table-chip">{{sessionTableName}}</view>
+      </view>
+
+      <view class="search-box">
+        <view class="search-icon"></view>
+        <input
+          class="search-input"
+          value="{{searchKeyword}}"
+          placeholder="搜索想吃的菜"
+          placeholder-class="search-placeholder"
+          confirm-type="search"
+          bindinput="onSearchInput"
+        />
+        <view wx:if="{{searchKeyword}}" class="search-clear" bindtap="onClearSearch">×</view>
+      </view>
+
+      <view wx:if="{{activeSession}}" class="session-strip" bindtap="goSession">
+        <view class="session-strip-icon">桌</view>
+        <view class="grow">
+          <view class="session-strip-title">堂食中 · {{sessionTableName}}</view>
+          <view class="session-strip-sub">
+            {{sessionStatusText}} · {{sessionMemberCount}} 人同桌
+            <text wx:if="{{hasSubmittedOrder}}"> · 已有当前订单</text>
+          </view>
+        </view>
+        <view class="session-strip-side">
+          <view class="session-strip-amount">¥{{sessionTotalText}}</view>
+          <view class="session-strip-enter">查看本单 ›</view>
+        </view>
+      </view>
+      <view wx:else class="dining-invite" bindtap="goDining">
+        <view class="dining-invite-dot"></view>
+        想堂食？扫码开台或加入同桌
+        <text class="dining-invite-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="menu-toolbar page-pad">
+    <view wx:if="{{!shopOpen}}" class="closed-banner">
+      门店今日已打烊，菜单可浏览，营业后可下单。
+    </view>
+    <view class="tab-pills menu-switch">
+      <view
+        class="tab-pill {{activeType === 1 ? 'tab-pill-active' : ''}}"
+        data-type="{{1}}"
+        bindtap="onTypeChange"
+      >单点菜品</view>
+      <view
+        class="tab-pill {{activeType === 2 ? 'tab-pill-active' : ''}}"
+        data-type="{{2}}"
+        bindtap="onTypeChange"
+      >精选套餐</view>
+    </view>
+  </view>
+
+  <block wx:if="{{loading}}">
+    <view class="menu-state">
+      <view class="empty-art"></view>
+      <view class="loading-line">正在准备今日菜单…</view>
+    </view>
+  </block>
+
+  <block wx:elif="{{loadError}}">
+    <view class="menu-state">
+      <view class="empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">菜单没加载出来</view>
+        <view class="empty-text">{{loadError}}</view>
+        <button class="btn btn-primary btn-sm retry-btn" bindtap="onRetry">重新加载</button>
+      </view>
+    </view>
+  </block>
+
+  <view wx:else class="menu-workbench">
+    <scroll-view class="category-rail" scroll-y show-scrollbar="{{false}}">
+      <view class="rail-caption">菜品分类</view>
+      <view
+        class="rail-item {{activeCategoryId === 0 ? 'rail-item-active' : ''}}"
+        data-id="{{0}}"
+        bindtap="onCategoryTap"
+      >
+        <view class="rail-bar"></view>
+        <view class="rail-label">全部</view>
+      </view>
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="rail-item {{activeCategoryId === item.id ? 'rail-item-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="onCategoryTap"
+      >
+        <view class="rail-bar"></view>
+        <view class="rail-label">{{item.name}}</view>
+      </view>
+    </scroll-view>
+
+    <scroll-view class="dish-panel" scroll-y show-scrollbar="{{false}}">
+      <view class="dish-panel-inner">
+        <view class="dish-panel-head">
+          <view>
+            <view class="dish-panel-eyebrow">{{searchKeyword ? 'SEARCH RESULT' : 'TODAY MENU'}}</view>
+            <view class="dish-panel-title">
+              {{searchKeyword ? '搜索结果' : (activeType === 1 ? '今日好味' : '搭配好的套餐')}}
+            </view>
+            <view class="dish-panel-sub">
+              {{activeType === 1 ? dishes.length : setmeals.length}} 款可选
+              <text wx:if="{{activeSession}}"> · 本桌共享购物车</text>
+            </view>
+          </view>
+          <view wx:if="{{activeSession && !canOrder}}" class="tag tag-warm">已申请结账</view>
+        </view>
+
+        <block wx:if="{{activeType === 1}}">
+          <view wx:if="{{dishes.length === 0}}" class="empty dish-empty">
+            <view class="empty-art"></view>
+            <view class="empty-title">这个分类还没有菜</view>
+            <view class="empty-text">换个分类，或者清空搜索再看看。</view>
+          </view>
+
+          <view
+            wx:for="{{dishes}}"
+            wx:key="id"
+            class="dish-card card"
+          >
+            <view class="thumb dish-thumb">
+              <image
+                class="thumb-img"
+                src="{{item.imageSrc}}"
+                mode="aspectFill"
+                lazy-load
+                data-id="{{item.id}}"
+                binderror="onDishImageError"
+              />
+              <view wx:if="{{item.soldOut}}" class="dish-sold-mask">售罄</view>
+            </view>
+            <view class="dish-main grow">
+              <view class="dish-top">
+                <view class="dish-name">{{item.name}}</view>
+              </view>
+              <view class="dish-desc">{{item.description || '现点现做，热气上桌'}}</view>
+              <view wx:if="{{item.flavorText}}" class="dish-flavor">{{item.flavorText}}</view>
+              <view class="dish-foot">
+                <view class="dish-price"><text class="price-symbol">¥</text>{{item.priceText}}</view>
+                <view
+                  class="dish-select {{item.soldOut || !canOrder ? 'dish-select-disabled' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="onAddDish"
+                >
+                  <text>{{item.soldOut ? '售罄' : (canOrder ? item.actionText : '暂不可点')}}</text>
+                  <text wx:if="{{!item.soldOut}}" class="dish-select-arrow">›</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <block wx:else>
+          <view wx:if="{{setmeals.length === 0}}" class="empty dish-empty">
+            <view class="empty-art"></view>
+            <view class="empty-title">暂无套餐</view>
+            <view class="empty-text">先看看单点菜品，或稍后再来。</view>
+          </view>
+          <view
+            wx:for="{{setmeals}}"
+            wx:key="id"
+            class="dish-card card setmeal-card"
+            data-id="{{item.id}}"
+            bindtap="onSetmealTap"
+          >
+            <view class="thumb dish-thumb">
+              <image
+                class="thumb-img"
+                src="{{item.imageSrc}}"
+                mode="aspectFill"
+                lazy-load
+                data-id="{{item.id}}"
+                binderror="onSetmealImageError"
+              />
+              <view class="setmeal-flag">套餐</view>
+            </view>
+            <view class="dish-main grow">
+              <view class="dish-top">
+                <view class="dish-name">{{item.name}}</view>
+              </view>
+              <view class="dish-desc">{{item.itemSummary}}</view>
+              <view class="dish-foot">
+                <view class="dish-price"><text class="price-symbol">¥</text>{{item.priceText}}</view>
+                <view class="dish-select dish-select-quiet">
+                  <text>{{activeSession ? '堂食请单点' : '查看搭配'}}</text>
+                  <text class="dish-select-arrow">›</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+
+        <view class="menu-footer-note">图片为本地示意，实际以门店出品为准</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view wx:if="{{cartCount > 0 || activeSession}}" class="fixed-bar fixed-bar-tab cart-bar">
+    <view class="cart-bubble" bindtap="openCartSheet">
+      <view class="cart-bubble-icon"></view>
+      <view wx:if="{{cartCount > 0}}" class="cart-badge">{{cartCount}}</view>
+    </view>
+    <view class="cart-summary grow" bindtap="openCartSheet">
+      <view class="cart-total"><text class="price-symbol">¥</text>{{cartTotal}}</view>
+      <view class="cart-hint">
+        {{activeSession ? (hasSubmittedOrder ? '本桌已下单 · 加餐并入当前订单' : '本桌共享 · 下单后生成堂食订单') : '另需支付打包费'}}
+      </view>
+    </view>
+    <button class="btn btn-primary cart-button" bindtap="goCheckout">{{cartButtonText}}</button>
+  </view>
+
+  <view wx:if="{{showCartSheet}}" class="sheet-mask" bindtap="closeCartSheet"></view>
+  <view wx:if="{{showCartSheet}}" class="sheet cart-preview-sheet" catchtap="noop">
+    <view class="sheet-handle"></view>
+    <view class="cart-preview-head">
+      <view>
+        <view class="cart-preview-title">已选商品</view>
+        <view class="cart-preview-sub">共 {{cartCount}} 件 · 本桌成员共享</view>
+      </view>
+      <view class="cart-preview-clear" bindtap="onSheetClear">清空</view>
+    </view>
+
+    <scroll-view class="cart-preview-list" scroll-y show-scrollbar="{{false}}">
+      <view
+        wx:for="{{cartItems}}"
+        wx:key="id"
+        class="cart-preview-item"
+      >
+        <view class="thumb-sm cart-preview-thumb">
+          <image
+            class="thumb-img"
+            src="{{item.imageSrc}}"
+            mode="aspectFill"
+            data-id="{{item.id}}"
+            binderror="onSheetImageError"
+          />
+        </view>
+        <view class="cart-preview-main grow">
+          <view class="cart-preview-name">{{item.name}}</view>
+          <view wx:if="{{item.flavorText}}" class="cart-preview-flavor">{{item.flavorText}}</view>
+          <view class="cart-preview-unit">¥{{item.unitText}} / 份</view>
+          <view class="cart-preview-bottom">
+            <view class="cart-preview-line">¥{{item.lineText}}</view>
+            <view class="sheet-stepper">
+              <button
+                class="sheet-step {{sheetBusyId === item.id ? 'sheet-step-busy' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="onSheetMinus"
+              >−</button>
+              <view class="sheet-step-value">{{item.number}}</view>
+              <button
+                class="sheet-step sheet-step-plus {{sheetBusyId === item.id ? 'sheet-step-busy' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="onSheetPlus"
+              >+</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="cart-preview-foot">
+      <view class="cart-preview-total">
+        <view class="tiny muted">合计</view>
+        <view class="cart-preview-money"><text class="price-symbol">¥</text>{{cartTotal}}</view>
+      </view>
+      <button class="btn btn-primary cart-preview-btn" bindtap="goCheckout">
+        {{activeSession ? (hasSubmittedOrder ? '去加餐' : '去下单') : '去结算'}}
+      </button>
+    </view>
+  </view>
+
+  <view wx:if="{{showFlavor}}" class="sheet-mask" bindtap="onCloseFlavor"></view>
+  <view wx:if="{{showFlavor}}" class="sheet flavor-sheet" catchtap="noop">
+    <view class="sheet-handle"></view>
+    <view class="sheet-head">
+      <view>
+        <view class="sheet-title">选择口味</view>
+        <view class="sheet-sub">每一组选一个，选好后加入购物车</view>
+      </view>
+      <view class="sheet-close" bindtap="onCloseFlavor">×</view>
+    </view>
+
+    <view class="flavor-product">
+      <view class="thumb-sm flavor-thumb"><image class="thumb-img" src="{{flavorImage}}" mode="aspectFill" /></view>
+      <view class="grow">
+        <view class="flavor-product-name">{{flavorName}}</view>
+        <view class="flavor-product-price"><text class="price-symbol">¥</text>{{flavorPrice}}</view>
+      </view>
+    </view>
+
+    <scroll-view class="flavor-scroll" scroll-y>
+      <view wx:for="{{flavorGroups}}" wx:key="name" class="flavor-group">
+        <view class="flavor-group-title">{{item.name}}</view>
+        <view class="flavor-options">
+          <view
+            wx:for="{{item.options}}"
+            wx:for-item="option"
+            wx:for-index="oi"
+            wx:key="*this"
+            class="chip {{item.selected === option ? 'chip-active' : ''}}"
+            data-gi="{{index}}"
+            data-option="{{option}}"
+            bindtap="onFlavorSelect"
+          >{{option}}</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <button class="btn btn-primary btn-block flavor-confirm" bindtap="onFlavorConfirm">
+      加入购物车 · ¥{{flavorPrice}}
+    </button>
+  </view>
+
+  <view wx:if="{{showSetmeal}}" class="sheet-mask" bindtap="onCloseSetmeal"></view>
+  <view wx:if="{{showSetmeal}}" class="sheet setmeal-sheet" catchtap="noop">
+    <view class="sheet-handle"></view>
+    <view class="sheet-head">
+      <view>
+        <view class="sheet-title">{{setmealDetail.name}}</view>
+        <view class="sheet-sub">{{setmealDetail.itemSummary}}</view>
+      </view>
+      <view class="sheet-close" bindtap="onCloseSetmeal">×</view>
+    </view>
+
+    <view class="setmeal-cover">
+      <image class="setmeal-cover-img" src="{{setmealDetail.imageSrc}}" mode="aspectFill" />
+      <view class="setmeal-cover-price">¥{{setmealDetail.priceText}}</view>
+    </view>
+
+    <view class="setmeal-items-title">套餐包含</view>
+    <scroll-view class="setmeal-items" scroll-y>
+      <view wx:for="{{setmealItems}}" wx:key="name" class="setmeal-item">
+        <view class="thumb-sm setmeal-item-thumb">
+          <image class="thumb-img" src="{{item.imageSrc}}" mode="aspectFill" />
+        </view>
+        <view class="grow">
+          <view class="setmeal-item-name">{{item.name}} <text class="setmeal-copies">×{{item.copies}}</text></view>
+          <view class="setmeal-item-desc">{{item.description || '套餐搭配菜品'}}</view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <button
+      class="btn btn-block setmeal-add-btn {{activeSession ? 'btn-disabled' : 'btn-primary'}}"
+      bindtap="onAddSetmeal"
+    >{{activeSession ? '堂食暂不支持套餐，请单点' : '加入购物车 · ¥' + setmealDetail.priceText}}</button>
+  </view>
+</view>

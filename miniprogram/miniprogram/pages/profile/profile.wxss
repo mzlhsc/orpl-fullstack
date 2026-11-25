@@ -1,0 +1,258 @@
+.profile-hero {
+  padding-bottom: 30rpx;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  margin-top: 28rpx;
+}
+
+.profile-avatar {
+  width: 108rpx;
+  height: 108rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 4rpx solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8552d, #f29a6f);
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  box-shadow: 0 12rpx 28rpx rgba(232, 85, 45, 0.3);
+}
+
+.profile-name {
+  font-size: 38rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.profile-meta {
+  margin-top: 8rpx;
+  font-size: 21rpx;
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.profile-stats {
+  display: flex;
+  margin-top: 26rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-stat {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-stat + .profile-stat {
+  border-left: 1rpx solid rgba(255, 255, 255, 0.12);
+}
+
+.profile-stat-value {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #f3c3b2;
+}
+
+.profile-stat-label {
+  margin-top: 2rpx;
+  font-size: 19rpx;
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.profile-body {
+  padding-top: 20rpx;
+}
+
+.active-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx;
+  border: 1rpx solid #f2d3c3;
+  border-radius: 22rpx;
+  background: #fff8f3;
+  box-shadow: 0 10rpx 28rpx rgba(232, 85, 45, 0.06);
+}
+
+.active-profile-card:active {
+  opacity: 0.88;
+}
+
+.active-profile-icon {
+  width: 54rpx;
+  height: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 16rpx;
+  background: #1f2937;
+  color: #ffffff;
+  font-size: 21rpx;
+  font-weight: 700;
+}
+
+.active-profile-title {
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.active-profile-sub {
+  margin-top: 4rpx;
+  font-size: 20rpx;
+  color: #9a6b4f;
+}
+
+.active-profile-chev {
+  margin-left: auto;
+}
+
+.profile-section-head {
+  margin-top: 30rpx;
+}
+
+.service-card {
+  padding: 2rpx 20rpx;
+}
+
+.service-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f3efe9;
+}
+
+.service-row:last-child {
+  border-bottom: none;
+}
+
+.service-row:active {
+  opacity: 0.85;
+}
+
+.service-icon {
+  width: 54rpx;
+  height: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 15rpx;
+  font-size: 20rpx;
+  font-weight: 700;
+}
+
+.service-icon-orange {
+  background: #fdf0e8;
+  color: #b8461f;
+}
+
+.service-icon-dark {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.service-icon-green {
+  background: #eaf5ee;
+  color: #16803c;
+}
+
+.service-icon-warm {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.service-title {
+  font-size: 25rpx;
+  font-weight: 600;
+}
+
+.service-sub {
+  margin-top: 2rpx;
+  font-size: 19rpx;
+  color: #9ca3af;
+}
+
+.account-card {
+  padding: 4rpx 22rpx;
+}
+
+.account-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 13rpx 0;
+  border-bottom: 1rpx solid #f3efe9;
+}
+
+.account-row:last-child {
+  border-bottom: none;
+}
+
+.account-label {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #8a8f98;
+}
+
+.account-value {
+  font-size: 22rpx;
+  color: #1f2937;
+  text-align: right;
+  word-break: break-all;
+}
+
+.account-mono {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 20rpx;
+}
+
+.account-wrap {
+  max-width: 480rpx;
+}
+
+.setting-card {
+  padding: 2rpx 22rpx;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 86rpx;
+  border-bottom: 1rpx solid #f3efe9;
+  font-size: 25rpx;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row:active {
+  opacity: 0.85;
+}
+
+.profile-logout {
+  margin-top: 30rpx;
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 22rpx;
+  color: #b23a2f;
+}
+
+.profile-footer {
+  padding: 8rpx 0 36rpx;
+  text-align: center;
+  font-size: 19rpx;
+  letter-spacing: 1rpx;
+  color: #b0b4ba;
+}

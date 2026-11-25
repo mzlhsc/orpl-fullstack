@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="20dp">
+
+    <TextView
+        style="@style/Text.Orpl.Muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分类名称" />
+
+    <EditText
+        android:id="@+id/et_name"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="6dp"
+        android:hint="例如：热菜"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <TextView
+        style="@style/Text.Orpl.Muted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="排序值（越小越靠前）" />
+
+    <EditText
+        android:id="@+id/et_sort"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="6dp"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/tv_hint"
+        style="@style/Text.Orpl.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="启用状态可在列表里直接切换" />
+</LinearLayout>

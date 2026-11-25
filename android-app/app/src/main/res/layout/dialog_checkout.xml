@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="20dp">
+
+    <TextView
+        android:id="@+id/tv_summary"
+        style="@style/Text.Orpl.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="—"
+        android:textSize="13sp" />
+
+    <TextView
+        style="@style/Text.Orpl.Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="支付方式" />
+
+    <RadioGroup
+        android:id="@+id/rg_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_wechat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="微信"
+            android:textSize="13.5sp" />
+
+        <RadioButton
+            android:id="@+id/rb_alipay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="支付宝"
+            android:textSize="13.5sp" />
+
+        <RadioButton
+            android:id="@+id/rb_cash"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="现金"
+            android:textSize="13.5sp" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Text.Orpl.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="强制结清未支付的 AA 账单"
+            android:textSize="13sp" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/sw_settle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_remark"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="6dp"
+        android:hint="备注（选填，如：前台现金结账）"
+        android:inputType="text"
+        android:maxLines="1" />
+</LinearLayout>

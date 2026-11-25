@@ -1,0 +1,144 @@
+<view class="page confirm-page">
+  <view class="confirm-head">
+    <view class="eyebrow">DELIVERY CHECK</view>
+    <view class="title">确认订单</view>
+    <view class="muted small confirm-sub">再核对一下地址和菜品，就可以送到你身边。</view>
+  </view>
+
+  <view class="page-pad">
+    <view wx:if="{{loading}}" class="loading-line">正在准备订单…</view>
+
+    <block wx:else>
+      <view wx:if="{{!shopOpen}}" class="notice notice-warm">门店已打烊，暂时不能提交订单。</view>
+
+      <view class="card address-card" bindtap="onAddressTap">
+        <block wx:if="{{address}}">
+          <view class="address-top">
+            <view class="address-icon">收</view>
+            <view class="grow">
+              <view class="address-name">{{address.consignee}} <text class="address-phone">{{address.phone}}</text></view>
+              <view class="address-detail">
+                <text wx:if="{{addressRegionText}}">{{addressRegionText}} </text>{{addressLine}}
+              </view>
+              <view wx:if="{{address.isDefault}}" class="tag tag-warm address-tag">默认地址</view>
+            </view>
+            <view class="chev"></view>
+          </view>
+        </block>
+        <block wx:else>
+          <view class="address-empty">
+            <view class="address-icon address-icon-dark">+</view>
+            <view class="grow">
+              <view class="address-name">还没有收货地址</view>
+              <view class="address-detail">点击新增地址，填写收货信息</view>
+            </view>
+            <view class="chev"></view>
+          </view>
+        </block>
+      </view>
+
+      <view class="section-head order-section-head">
+        <view class="section-title">菜品明细</view>
+        <view class="tiny muted">共 {{count}} 件</view>
+      </view>
+      <view class="card order-items-card">
+        <view wx:for="{{items}}" wx:key="id" class="confirm-item">
+          <view class="thumb thumb-sm confirm-thumb">
+            <image
+              class="thumb-img"
+              src="{{item.imageSrc}}"
+              mode="aspectFill"
+              data-id="{{item.id}}"
+              binderror="onItemImageError"
+            />
+          </view>
+          <view class="grow confirm-item-main">
+            <view class="confirm-item-name">{{item.name}}</view>
+            <view wx:if="{{item.flavorText}}" class="confirm-item-flavor">{{item.flavorText}}</view>
+            <view class="confirm-item-unit">¥{{item.unitText}} × {{item.number}}</view>
+          </view>
+          <view class="confirm-item-price">¥{{item.lineText}}</view>
+        </view>
+      </view>
+
+      <view class="section-head order-section-head">
+        <view class="section-title">配送与餐具</view>
+      </view>
+      <view class="card card-pad form-card">
+        <view class="cell">
+          <view class="cell-label">配送方式</view>
+          <view class="cell-value">立即送出 <text class="cell-hint">预计 {{expectedTime}} 送达</text></view>
+        </view>
+        <view class="divider"></view>
+        <view class="cell">
+          <view class="cell-label">支付方式</view>
+          <view class="cell-value">微信支付 <text class="tag tag-warm pay-tag">模拟支付</text></view>
+        </view>
+        <view class="divider"></view>
+        <view class="cell">
+          <view class="cell-label">餐具</view>
+          <view class="tableware-options">
+            <view
+              class="chip {{tablewareMode === 'auto' ? 'chip-active' : ''}}"
+              data-mode="auto"
+              bindtap="onTablewareTap"
+            >按餐量提供</view>
+            <view
+              class="chip {{tablewareMode === 'none' ? 'chip-active' : ''}}"
+              data-mode="none"
+              bindtap="onTablewareTap"
+            >无需餐具</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="section-head order-section-head">
+        <view class="section-title">备注</view>
+        <view class="tiny muted">选填</view>
+      </view>
+      <view class="card card-pad">
+        <textarea
+          class="field-textarea remark-input"
+          value="{{remark}}"
+          maxlength="100"
+          placeholder="口味、餐具或配送上的小要求…"
+          placeholder-class="placeholder"
+          bindinput="onRemarkInput"
+        ></textarea>
+      </view>
+
+      <view class="card summary-card confirm-summary">
+        <view class="summary-row">
+          <view class="summary-label">商品小计</view>
+          <view class="summary-value">¥{{subtotalText}}</view>
+        </view>
+        <view class="summary-row">
+          <view class="summary-label">打包费</view>
+          <view class="summary-value">¥0.00</view>
+        </view>
+        <view class="divider summary-divider"></view>
+        <view class="summary-row summary-total">
+          <view class="summary-label">应付</view>
+          <view class="summary-amount"><text class="price-symbol">¥</text>{{totalText}}</view>
+        </view>
+      </view>
+
+      <view class="confirm-note">
+        本项目未接入真实微信支付，提交后订单直接进入待接单状态。
+      </view>
+    </block>
+  </view>
+
+  <view wx:if="{{!loading}}" class="fixed-bottom">
+    <view class="confirm-fixed">
+      <view class="grow">
+        <view class="tiny muted">合计</view>
+        <view class="confirm-fixed-money"><text class="price-symbol">¥</text>{{totalText}}</view>
+      </view>
+      <button
+        class="btn submit-btn {{submitting || !shopOpen || !address ? 'btn-disabled' : 'btn-primary'}}"
+        bindtap="onSubmit"
+      >{{submitting ? '提交中…' : '提交订单'}}</button>
+    </view>
+  </view>
+</view>

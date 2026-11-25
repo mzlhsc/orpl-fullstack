@@ -1,0 +1,17 @@
+{
+  "properties": [
+    {
+      "name": "mzlhsc.jwt.token-ttl",
+      "type": "java.time.Duration",
+      "description": "令牌有效期。",
+      "defaultValue": "30m",
+      "sourceType": "com.mzlhsc.orpl.auth.config.JwtProperties"
+    },
+    {
+      "name": "mzlhsc.redisson.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否启用 Redisson 客户端（分布式锁）。为 true 且 classpath 存在 Redisson 时才创建客户端。",
+      "defaultValue": false
+    }
+  ]
+}

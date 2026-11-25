@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>瑞吉外卖管理端 · Android 设计预览</title>
+<style>
+  :root{
+    --brand:#E8552D; --brand-strong:#C9431F; --brand-soft:#FFF0EB; --brand-line:#FFD9CD;
+    --ink:#1F2937; --ink-2:#374151; --muted:#6B7280; --muted-2:#9CA3AF;
+    --bg:#F4F5F7; --card:#fff; --line:#E5E7EB; --line-soft:#F0F1F3;
+    --sidebar:#18222D; --sidebar-2:#2C3A49; --sidebar-3:#141D26;
+    --success:#16803C; --success-soft:#E9F7EE; --warn:#B45309; --warn-soft:#FFF7E6;
+    --danger:#C62828; --danger-soft:#FDECEC; --info:#0E7490; --info-soft:#E8F6F9;
+    --font:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:36px 24px 56px;background:#eef0f3;color:var(--ink);font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+  }
+  .head{max-width:1520px;margin:0 auto 26px}
+  .head h1{margin:0 0 6px;font-size:22px;letter-spacing:-.2px}
+  .head p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+  .head .tagline{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-strong);font-size:12px}
+  .frames{max-width:1520px;margin:0 auto;display:flex;gap:26px;overflow-x:auto;padding-bottom:10px;align-items:flex-start}
+  .frame{flex:0 0 auto;width:358px}
+  .frame-label{font-size:12.5px;color:var(--muted);margin:0 0 10px 6px;display:flex;align-items:center;gap:8px}
+  .frame-label b{color:var(--ink);font-weight:600}
+  .phone{
+    width:358px;height:720px;border-radius:32px;background:var(--bg);border:8px solid #11161d;
+    box-shadow:0 22px 48px rgba(16,24,40,.18);overflow:hidden;position:relative;display:flex;flex-direction:column;
+  }
+  .statusbar{height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;
+    font-size:10.5px;color:var(--ink-2);background:#fff;flex:0 0 auto}
+  .statusbar.dark{background:transparent;color:#fff}
+  .screen{flex:1;overflow-y:auto;overflow-x:hidden}
+  .screen::-webkit-scrollbar{width:0}
+
+  .pad{padding:12px 16px 18px}
+  .title{font-size:21px;font-weight:700;letter-spacing:-.2px;margin:0}
+  .subtitle{font-size:12.5px;color:var(--muted);margin:3px 0 0}
+  .row{display:flex;align-items:center}
+  .between{justify-content:space-between}
+  .gap8{gap:8px}.gap6{gap:6px}
+
+  .pill{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:999px;
+    background:#fff;border:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  .dot{width:8px;height:8px;border-radius:50%}
+  .dot.off{background:#EF8A8A}
+  .dot.on{background:#35C46A}
+
+  .hero{margin-top:14px;border-radius:18px;padding:18px;color:#fff;
+    background:linear-gradient(180deg,#2C3A49,#141D26)}
+  .hero .lbl{font-size:12.5px;color:rgba(255,255,255,.7)}
+  .hero .amount{font-size:32px;font-weight:600;letter-spacing:-.6px;margin-top:6px}
+  .hero .split{height:1px;background:rgba(255,255,255,.2);margin:14px 0 12px}
+  .hero .cols{display:flex}
+  .hero .cols div{flex:1}
+  .hero .cols b{font-size:16px;font-weight:600}
+  .hero .cols span{display:block;font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+  .stat .top{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+  .ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:12px}
+  .ic.brand{background:var(--brand-soft);color:var(--brand-strong)}
+  .ic.green{background:var(--success-soft);color:var(--success)}
+  .ic.blue{background:var(--info-soft);color:var(--info)}
+  .ic.amber{background:var(--warn-soft);color:var(--warn)}
+  .ic.slate{background:#F0F2F5;color:#52606D}
+  .stat .val{font-size:24px;font-weight:700;margin-top:10px;font-variant-numeric:tabular-nums}
+  .stat .val small{font-size:12px;color:var(--muted);font-weight:500;margin-left:2px}
+  .stat .sub{font-size:11px;color:var(--muted-2);margin-top:2px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+  .card-h{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
+  .card-h h3{margin:0;font-size:15px;font-weight:600}
+  .card-h .more{font-size:12px;color:var(--brand-strong)}
+  .card-b{padding:0 16px 14px}
+
+  .chart{display:flex;align-items:flex-end;gap:9px;height:132px;padding:10px 2px 0;border-bottom:1px solid var(--line-soft);position:relative}
+  .chart .bar{flex:1;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#F4774F,#E8552D)}
+  .chart-x{display:flex;gap:9px;margin-top:6px}
+  .chart-x span{flex:1;text-align:center;font-size:10px;color:var(--muted-2)}
+
+  .pending{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--line-soft)}
+  .pending:last-child{border-bottom:0}
+  .pending .no{font-size:13px;font-weight:600}
+  .pending .meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .pending .amt{font-size:15px;font-weight:700;margin-right:8px}
+
+  .btn{border:0;border-radius:8px;font-size:12px;font-weight:600;padding:7px 12px;font-family:var(--font)}
+  .btn.primary{background:var(--brand);color:#fff}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink-2)}
+  .btn.danger{background:#fff;border:1px solid #F3C6C6;color:var(--danger)}
+  .btn.block{width:100%;height:44px;font-size:14px;border-radius:10px}
+
+  /* 订单 */
+  .chips{display:flex;gap:8px;margin-top:12px;overflow:hidden}
+  .chip{flex:0 0 auto;height:34px;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;
+    background:#F2F3F5;color:var(--muted);font-size:12.5px;border:1px solid #F2F3F5}
+  .chip.on{background:var(--brand-soft);border-color:var(--brand-line);color:var(--brand-strong);font-weight:500}
+  .search{display:flex;gap:8px;margin-top:10px}
+  .input{flex:1;height:40px;border:1px solid var(--line);border-radius:10px;background:#fff;display:flex;
+    align-items:center;gap:6px;padding:0 12px;font-size:13px;color:var(--muted-2)}
+
+  .order{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px}
+  .order .o-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .order .no{font-size:13.5px;font-weight:600}
+  .tag{font-size:11.5px;padding:3px 8px;border-radius:12px;font-weight:500;white-space:nowrap}
+  .tag.brand{background:var(--brand-soft);color:var(--brand-strong)}
+  .tag.info{background:var(--info-soft);color:var(--info)}
+  .tag.warn{background:var(--warn-soft);color:var(--warn)}
+  .tag.success{background:var(--success-soft);color:var(--success)}
+  .tag.neutral{background:#F2F3F5;color:var(--muted)}
+  .order .meta{font-size:11.5px;color:var(--muted-2);margin-top:5px}
+  .order .dishes{font-size:13px;color:var(--ink-2);margin-top:8px;line-height:1.5}
+  .order .who{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .order .o-f{display:flex;align-items:center;justify-content:space-between;margin-top:11px}
+  .order .money{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+
+  /* 商品 */
+  .tabs{display:flex;gap:22px;background:#fff;padding:0 16px;margin-top:8px;border-bottom:1px solid var(--line-soft)}
+  .tab{padding:12px 0;font-size:14px;color:var(--muted);position:relative}
+  .tab.on{color:var(--ink);font-weight:600}
+  .tab.on:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--brand);border-radius:2px}
+  .dish{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px}
+  .dish .d-h{display:flex;align-items:center;gap:12px}
+  .thumb{width:56px;height:56px;border-radius:8px;background:#F2F3F5;display:grid;place-items:center;color:#C7CBD1;font-size:18px;flex:0 0 auto}
+  .dish .name{font-size:14.5px;font-weight:600}
+  .dish .meta{font-size:12px;color:var(--muted);margin-top:4px}
+  .switch{width:42px;height:24px;border-radius:999px;background:#D7DBE2;position:relative;flex:0 0 auto;margin-left:auto}
+  .switch:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch.on{background:var(--brand)}
+  .switch.on:after{transform:translateX(18px)}
+  .dish .d-f{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line-soft);
+    margin-top:10px;padding-top:8px;font-size:12px;color:var(--muted)}
+  .dish .d-f b{color:var(--brand-strong);font-weight:500}
+
+  /* 我的 */
+  .profile{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
+  .avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:18px;
+    background:linear-gradient(135deg,#F4774F,#E8552D)}
+  .profile .n{font-size:16px;font-weight:600}
+  .profile .u{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .action{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-soft);min-height:54px}
+  .action:last-child{border-bottom:0}
+  .action .t{font-size:14px;color:var(--ink)}
+  .action .s{font-size:11.5px;color:var(--muted-2);margin-top:2px}
+  .action .v{margin-left:auto;font-size:12.5px;color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .chev{color:#C7CBD1;font-size:14px;margin-left:2px}
+
+  .navbar{flex:0 0 auto;height:56px;background:#fff;border-top:1px solid var(--line-soft);display:flex}
+  .navbar div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    font-size:10.5px;color:var(--muted-2)}
+  .navbar div.on{color:var(--brand-strong);font-weight:600}
+  .navbar .glyph{font-size:16px;line-height:1}
+  .badge{position:absolute;transform:translate(10px,-8px);background:var(--brand);color:#fff;font-size:9px;
+    min-width:14px;height:14px;border-radius:7px;display:grid;place-items:center;padding:0 3px}
+  .note{border:1px dashed var(--line);border-radius:14px;padding:14px 16px;background:#fff;margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.8;max-width:1520px;margin-left:auto;margin-right:auto}
+  .note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>瑞吉外卖 · 管理端 Android App</h1>
+  <p>原生 Kotlin + XML 布局，色板与圆角沿用 <code>nginx/html/admin</code> 的 app.css：主色 #E8552D、14dp 卡片、1dp 描边、无阴影。</p>
+  <span class="tagline">设计预览稿 · 与 app 内实际布局一致</span>
+</div>
+
+<div class="frames">
+
+  <!-- 工作台 -->
+  <div class="frame">
+    <div class="frame-label"><b>工作台</b> 今日经营概览 / 待接单快捷处理</div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="screen">
+        <div class="pad">
+          <div class="row between">
+            <div>
+              <p class="title">工作台</p>
+              <p class="subtitle">2026-11-24 周二</p>
+            </div>
+            <span class="pill"><span class="dot off"></span>打烊中</span>
+          </div>
+
+          <div class="hero">
+            <div class="lbl">今日营业额</div>
+            <div class="amount">¥ 1,286.00</div>
+            <div class="split"></div>
+            <div class="cols">
+              <div><b>38</b><span>有效订单</span></div>
+              <div><b>86.4%</b><span>完成率</span></div>
+              <div><b>¥33.84</b><span>客单价</span></div>
+            </div>
+          </div>
+
+          <div class="grid2">
+            <div class="stat">
+              <div class="top"><span class="ic green">单</span>有效订单</div>
+              <div class="val">38<small>单</small></div>
+              <div class="sub">今日已完成订单数</div>
+            </div>
+            <div class="stat">
+              <div class="top"><span class="ic blue">%</span>订单完成率</div>
+              <div class="val">86.4%</div>
+              <div class="sub">有效订单 / 总订单</div>
+            </div>
+            <div class="stat">
+              <div class="top"><span class="ic amber">¥</span>平均客单价</div>
+              <div class="val">¥33.84</div>
+              <div class="sub">营业额 / 有效订单</div>
+            </div>
+            <div class="stat">
+              <div class="top"><span class="ic slate">人</span>今日新增用户</div>
+              <div class="val">12<small>人</small></div>
+              <div class="sub">注册用户数</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><h3>近 7 天营业额</h3><span class="more">11-18 - 11-24</span></div>
+            <div class="card-b">
+              <div class="chart">
+                <div class="bar" style="height:42%"></div>
+                <div class="bar" style="height:66%"></div>
+                <div class="bar" style="height:51%"></div>
+                <div class="bar" style="height:78%"></div>
+                <div class="bar" style="height:62%"></div>
+                <div class="bar" style="height:88%"></div>
+                <div class="bar" style="height:70%"></div>
+              </div>
+              <div class="chart-x">
+                <span>11-18</span><span>11-19</span><span>11-20</span><span>11-21</span>
+                <span>11-22</span><span>11-23</span><span>11-24</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-h"><h3>待接单订单</h3><span class="more">全部订单 ›</span></div>
+            <div class="card-b">
+              <div class="pending">
+                <div>
+                  <div class="no">20261124000128</div>
+                  <div class="meta">外卖 · 王芳 · 11-24 09:32</div>
+                </div>
+                <div class="row">
+                  <span class="amt">¥48.00</span>
+                  <button class="btn primary">接单</button>
+                </div>
+              </div>
+              <div class="pending">
+                <div>
+                  <div class="no">20261124000127</div>
+                  <div class="meta">堂食 · 3 号桌 · 11-24 09:28</div>
+                </div>
+                <div class="row">
+                  <span class="amt">¥126.00</span>
+                  <button class="btn primary">接单</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <div class="on"><span class="glyph">▦</span>工作台</div>
+        <div><span class="glyph">▤</span><span style="position:relative">订单<span class="badge">2</span></span></div>
+        <div><span class="glyph">▣</span>堂食</div>
+        <div><span class="glyph">◡</span>商品</div>
+        <div><span class="glyph">☺</span>我的</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 订单 -->
+  <div class="frame">
+    <div class="frame-label"><b>订单</b> 状态筛选 / 搜索 / 接单完成与支付</div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="screen">
+        <div class="pad" style="padding-bottom:6px">
+          <p class="title">订单</p>
+          <p class="subtitle">接单、完成、支付状态与异常处理</p>
+          <div class="chips">
+            <span class="chip on">全部</span>
+            <span class="chip">待付款</span>
+            <span class="chip">待接单</span>
+            <span class="chip">已接单</span>
+            <span class="chip">已完成</span>
+          </div>
+          <div class="search">
+            <div class="input">⌕ 订单号 / 手机号</div>
+            <button class="btn ghost" style="height:40px;padding:0 14px">查询</button>
+          </div>
+        </div>
+        <div class="pad" style="padding-top:2px">
+          <div class="order">
+            <div class="o-h"><span class="no">20261124000128</span><span class="tag brand">待接单</span></div>
+            <div class="meta">外卖 · 11-24 09:32 · 已支付</div>
+            <div class="dishes">宫保鸡丁*1、米饭*1、紫菜蛋花汤*1</div>
+            <div class="who">王芳 · 13800001234</div>
+            <div class="o-f">
+              <span class="money">¥48.00</span>
+              <div class="row gap6">
+                <button class="btn primary">接单</button>
+                <button class="btn danger">拒单</button>
+                <button class="btn ghost">取消</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">20261124000127</span><span class="tag info">已接单</span></div>
+            <div class="meta">堂食 · 11-24 09:28 · 已支付</div>
+            <div class="dishes">单人套餐*2、酸梅汤*2</div>
+            <div class="who">李强 · 13900005678</div>
+            <div class="o-f">
+              <span class="money">¥126.00</span>
+              <div class="row gap6">
+                <button class="btn primary">完成</button>
+                <button class="btn ghost">取消</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">20261124000126</span><span class="tag warn">待付款</span></div>
+            <div class="meta">外卖 · 11-24 09:12 · 未支付</div>
+            <div class="dishes">水煮牛肉*1、米饭*2</div>
+            <div class="who">赵敏 · 13700009876</div>
+            <div class="o-f">
+              <span class="money">¥63.00</span>
+              <div class="row gap6">
+                <button class="btn primary">接单</button>
+                <button class="btn ghost">取消</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">20261124000125</span><span class="tag success">已完成</span></div>
+            <div class="meta">外卖 · 11-24 08:56 · 已支付</div>
+            <div class="dishes">麻辣香锅*1、可乐*2</div>
+            <div class="who">周杰 · 13600001234</div>
+            <div class="o-f"><span class="money">¥88.00</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <div><span class="glyph">▦</span>工作台</div>
+        <div class="on"><span class="glyph">▤</span><span style="position:relative">订单<span class="badge">2</span></span></div>
+        <div><span class="glyph">▣</span>堂食</div>
+        <div><span class="glyph">◡</span>商品</div>
+        <div><span class="glyph">☺</span>我的</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 堂食 -->
+  <div class="frame">
+    <div class="frame-label"><b>堂食</b> 桌台看板 / 会话 / 预约 / 报表</div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="screen">
+        <div class="pad" style="padding-bottom:0">
+          <p class="title">堂食管理</p>
+          <p class="subtitle">桌台、就餐会话、预约与堂食经营报表</p>
+        </div>
+        <div class="tabs"><span class="tab on">桌台</span><span class="tab">会话</span><span class="tab">预约</span><span class="tab">报表</span></div>
+        <div class="pad" style="padding-top:10px">
+          <div class="row between">
+            <div class="chips" style="margin-top:0">
+              <span class="chip on">全部</span>
+              <span class="chip">空闲</span>
+              <span class="chip">就餐中</span>
+              <span class="chip">待结账</span>
+            </div>
+            <button class="btn ghost">新增桌台</button>
+          </div>
+          <div class="meta" style="font-size:11.5px;color:var(--muted-2);margin-top:8px">空闲 5 · 就餐中 2 · 待结账 1 · 共 8 张</div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">A04</span><span class="tag brand">就餐中</span></div>
+            <div class="meta">大厅 · 4 座 · 可预约</div>
+            <div class="dishes">当前会话 #60 · D20261124190138338</div>
+            <div class="o-f">
+              <span class="who" style="margin-top:0">¥186.00 · 3 人</span>
+              <div class="row gap6">
+                <button class="btn ghost">更多</button>
+                <button class="btn primary">查看会话</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">A02</span><span class="tag success">空闲</span></div>
+            <div class="meta">大厅 · 2 座 · 可预约</div>
+            <div class="dishes">当前无就餐会话</div>
+            <div class="o-f">
+              <span class="who" style="margin-top:0">二维码已就绪</span>
+              <div class="row gap6">
+                <button class="btn ghost">更多</button>
+                <button class="btn primary">开台</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="order">
+            <div class="o-h"><span class="no">B01</span><span class="tag warn">待结账</span></div>
+            <div class="meta">包间 · 8 座 · 不可预约</div>
+            <div class="dishes">当前会话 #58 · D20261124184210125</div>
+            <div class="o-f">
+              <span class="who" style="margin-top:0">¥428.00 · 6 人</span>
+              <div class="row gap6">
+                <button class="btn danger">关闭会话</button>
+                <button class="btn primary">查看会话</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <div><span class="glyph">▦</span>工作台</div>
+        <div><span class="glyph">▤</span><span style="position:relative">订单<span class="badge">2</span></span></div>
+        <div class="on"><span class="glyph">▣</span>堂食</div>
+        <div><span class="glyph">◡</span>商品</div>
+        <div><span class="glyph">☺</span>我的</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品 -->
+  <div class="frame">
+    <div class="frame-label"><b>商品</b> 菜品/套餐、起售停售、库存</div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="screen">
+        <div class="pad" style="padding-bottom:8px">
+          <p class="title">商品管理</p>
+          <p class="subtitle">菜品与套餐的起售、停售和库存</p>
+        </div>
+        <div class="tabs"><span class="tab on">菜品</span><span class="tab">套餐</span></div>
+        <div class="pad" style="padding-top:12px">
+          <div class="search" style="margin-top:0">
+            <div class="input">⌕ 菜品名称</div>
+            <button class="btn ghost" style="height:40px;padding:0 14px">查询</button>
+          </div>
+          <div class="chips">
+            <span class="chip on">全部</span>
+            <span class="chip">热菜</span>
+            <span class="chip">凉菜</span>
+            <span class="chip">主食</span>
+          </div>
+
+          <div class="dish">
+            <div class="d-h">
+              <div class="thumb">菜</div>
+              <div>
+                <div class="name">宫保鸡丁</div>
+                <div class="meta">热菜 · ¥28.00</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="d-f"><span>库存 36</span><b>设置库存</b></div>
+          </div>
+
+          <div class="dish">
+            <div class="d-h">
+              <div class="thumb">菜</div>
+              <div>
+                <div class="name">水煮牛肉</div>
+                <div class="meta">热菜 · ¥58.00</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="d-f"><span>库存 12</span><b>设置库存</b></div>
+          </div>
+
+          <div class="dish">
+            <div class="d-h">
+              <div class="thumb">菜</div>
+              <div>
+                <div class="name">酸辣土豆丝</div>
+                <div class="meta">凉菜 · ¥16.00</div>
+              </div>
+              <div class="switch"></div>
+            </div>
+            <div class="d-f"><span>库存 0</span><b>设置库存</b></div>
+          </div>
+
+          <div class="dish">
+            <div class="d-h">
+              <div class="thumb">菜</div>
+              <div>
+                <div class="name">米饭</div>
+                <div class="meta">主食 · ¥3.00</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="d-f"><span>库存 200</span><b>设置库存</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="navbar">
+        <div><span class="glyph">▦</span>工作台</div>
+        <div><span class="glyph">▤</span><span style="position:relative">订单<span class="badge">2</span></span></div>
+        <div><span class="glyph">▣</span>堂食</div>
+        <div class="on"><span class="glyph">◡</span>商品</div>
+        <div><span class="glyph">☺</span>我的</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 我的 -->
+  <div class="frame">
+    <div class="frame-label"><b>我的</b> 账号、门店与自动接单设置</div>
+    <div class="phone">
+      <div class="statusbar"><span>9:41</span><span>5G · 100%</span></div>
+      <div class="screen">
+        <div class="pad">
+          <p class="title">我的</p>
+          <p class="subtitle">账号、门店状态与常用管理入口</p>
+
+          <div class="profile">
+            <div class="avatar">张</div>
+            <div>
+              <div class="n">张店长</div>
+              <div class="u">zhangsan</div>
+            </div>
+            <span class="tag brand" style="margin-left:auto">管理员</span>
+          </div>
+
+          <div class="card">
+            <div class="action" style="min-height:66px">
+              <div style="flex:1">
+                <div class="t">门店营业状态</div>
+                <div class="s">打烊中，用户端提示门店休息</div>
+              </div>
+              <div class="switch"></div>
+            </div>
+            <div class="action" style="min-height:66px;border-top:1px solid var(--line-soft)">
+              <div style="flex:1">
+                <div class="t">外卖自动接单</div>
+                <div class="s">新外卖订单直接进入已接单</div>
+              </div>
+              <div class="switch on"></div>
+            </div>
+            <div class="action" style="min-height:66px;border-top:1px solid var(--line-soft)">
+              <div style="flex:1">
+                <div class="t">堂食自动接单</div>
+                <div class="s">同桌加菜提交后自动接单</div>
+              </div>
+              <div class="switch"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="action">
+              <span class="ic brand">▤</span>
+              <div style="flex:1">
+                <div class="t">分类管理</div>
+                <div class="s">菜品分类与套餐分类</div>
+              </div>
+              <span class="chev">›</span>
+            </div>
+            <div class="action">
+              <span class="ic blue">☺</span>
+              <div style="flex:1">
+                <div class="t">员工管理</div>
+                <div class="s">账号状态与权限</div>
+              </div>
+              <span class="chev">›</span>
+            </div>
+            <div class="action">
+              <span class="ic green">▥</span>
+              <div style="flex:1">
+                <div class="t">数据统计</div>
+                <div class="s">营业额、订单与销量排行</div>
+              </div>
+              <span class="chev">›</span>
+            </div>
+            <div class="action">
+              <span class="ic amber">▤</span>
+              <div style="flex:1">
+                <div class="t">服务器地址</div>
+                <div class="s">接口地址，可随时切换</div>
+              </div>
+              <span class="v">10.0.2.2:8080/admin/</span>
+              <span class="chev">›</span>
+            </div>
+            <div class="action">
+              <span class="ic slate">⚿</span>
+              <div style="flex:1">
+                <div class="t">修改密码</div>
+                <div class="s">修改后下次登录生效</div>
+              </div>
+              <span class="chev">›</span>
+            </div>
+          </div>
+
+          <button class="btn ghost block" style="margin-top:16px;color:var(--danger);border-color:#F3C6C6;background:#fff">退出登录</button>
+          <p style="text-align:center;font-size:11.5px;color:var(--muted-2);margin-top:16px">order-platform · 管理端 v1.0.0</p>
+        </div>
+      </div>
+      <div class="navbar">
+        <div><span class="glyph">▦</span>工作台</div>
+        <div><span class="glyph">▤</span><span style="position:relative">订单<span class="badge">2</span></span></div>
+        <div><span class="glyph">▣</span>堂食</div>
+        <div><span class="glyph">◡</span>商品</div>
+        <div class="on"><span class="glyph">☺</span>我的</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="note">
+  <b>实现说明：</b>首页 hero 与订单详情头部使用与 Web 侧栏同源的深色渐变 <code>#2C3A49 → #141D26</code>；
+  状态标签沿用 <code>.tag-success / .tag-danger</code> 的浅底深字；柱状图为自绘 View（不引图表库）。
+  菜品图片来自后端 OSS 地址，加载失败时回落到中性底色占位。
+</div>
+</body>
+</html>

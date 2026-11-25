@@ -1,0 +1,83 @@
+# ============================================================
+# order-platform 生产环境配置（Ubuntu 22.04 / 单机部署）
+#
+# 加载方式（见 conf/orpl.service）：
+#   java -jar orpl-service.jar \
+#     --spring.profiles.active=prod \
+#     --spring.config.additional-location=file:/opt/orpl/conf/
+#
+# 敏感项全部走环境变量，变量写在 /opt/orpl/conf/orpl.env
+# ============================================================
+
+server:
+  # 只监听回环地址，公网统一经 nginx 80/443 反向代理，避免 8080 直接暴露
+  address: 127.0.0.1
+  port: ${SERVER_PORT:8080}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/orpl?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:orpl}
+    password: ${DB_PASSWORD:orpl}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 3s
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+  jackson:
+    time-zone: Asia/Shanghai
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: "classpath*:/mapper/**/*.xml"
+  configuration:
+    map-underscore-to-camel-case: true
+
+mzlhsc:
+  jwt:
+    token-ttl: 12h
+  redisson:
+    enabled: true
+  # 微信小程序真实登录：不配置时后端把登录 code 直接当 openid（开发模式）
+  wechat:
+    appid: ${WECHAT_APPID:}
+    secret: ${WECHAT_SECRET:}
+  # 阿里云 OSS：配置齐全时上传走 OSS；留空则由本地存储兜底（/opt/orpl/web/uploads）
+  aliyun:
+    endpoint: ${OSS_ENDPOINT:}
+    bucket-name: ${OSS_BUCKET:}
+    region: ${OSS_REGION:}
+    access-key-id: ${OSS_ACCESS_KEY_ID:}
+    access-key-secret: ${OSS_ACCESS_KEY_SECRET:}
+
+  # 文件存储：auto = OSS 配置齐全走 OSS，否则存本地目录（由 nginx 提供 /uploads/ 访问）
+  storage:
+    type: ${STORAGE_TYPE:auto}
+    local-dir: ${STORAGE_LOCAL_DIR:/opt/orpl/web/uploads}
+    public-prefix: ${STORAGE_PUBLIC_PREFIX:/uploads}
+
+knife4j:
+  enable: ${KNIFE4J_ENABLE:true}
+  setting:
+    language: zh_cn
+
+logging:
+  level:
+    root: info
+    com.mzlhsc.orpl: info

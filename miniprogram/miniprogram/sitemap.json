@@ -1,0 +1,9 @@
+{
+  "desc": "order-platform 顾客端小程序",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}

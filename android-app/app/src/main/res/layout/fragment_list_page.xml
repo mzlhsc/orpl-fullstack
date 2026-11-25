@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/page_pad"
+        android:paddingTop="12dp"
+        android:paddingEnd="@dimen/page_pad">
+
+        <EditText
+            android:id="@+id/et_search"
+            style="@style/Widget.Orpl.Input"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="6dp"
+            android:hint="菜品名称"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_search"
+            style="@style/Widget.Orpl.Button.Small.Ghost"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:minWidth="52dp"
+            android:text="查询" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add"
+            style="@style/Widget.Orpl.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:minWidth="52dp"
+            android:text="＋ 新增" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingStart="@dimen/page_pad"
+        android:paddingEnd="@dimen/page_pad"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/chip_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/page_pad"
+                android:paddingEnd="@dimen/page_pad"
+                android:scrollbars="none" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <include
+            android:id="@+id/empty"
+            layout="@layout/view_empty" />
+
+        <LinearLayout
+            android:id="@+id/loading_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="18dp"
+                android:layout_height="18dp" />
+
+            <TextView
+                style="@style/Text.Orpl.Muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/loading" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

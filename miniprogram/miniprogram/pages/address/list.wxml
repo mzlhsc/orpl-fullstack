@@ -1,0 +1,64 @@
+<view class="page address-page">
+  <view class="page-head address-head">
+    <view class="eyebrow">SAVED ADDRESSES</view>
+    <view class="title">收货地址</view>
+    <view class="muted small address-sub">{{selectMode ? '选择本次外卖要送到的地址' : '管理常用的收货信息，下单更快。'}}</view>
+  </view>
+
+  <view class="page-pad address-body">
+    <view wx:if="{{selectMode}}" class="notice notice-warm">点击任一地址即可用于本次下单。</view>
+    <view wx:if="{{loading}}" class="loading-line">正在读取地址…</view>
+
+    <block wx:elif="{{error}}">
+      <view class="empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">地址没加载出来</view>
+        <view class="empty-text">{{error}}</view>
+        <button class="btn btn-primary btn-sm retry-btn" bindtap="onRetry">重新加载</button>
+      </view>
+    </block>
+
+    <block wx:elif="{{addresses.length === 0}}">
+      <view class="empty address-empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">还没有收货地址</view>
+        <view class="empty-text">新增一个，外卖就能找到你。</view>
+        <button class="btn btn-primary btn-sm empty-action" bindtap="onAdd">新增地址</button>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view
+        wx:for="{{addresses}}"
+        wx:key="id"
+        class="address-item card"
+        data-id="{{item.id}}"
+        bindtap="onAddressTap"
+      >
+        <view class="address-item-top">
+          <view class="address-name">{{item.consignee}} <text class="address-phone">{{item.phone}}</text></view>
+          <view class="address-labels">
+            <view class="tag tag-warm">{{item.labelText}}</view>
+            <view wx:if="{{item.defaultText}}" class="tag tag-dark">默认</view>
+          </view>
+        </view>
+        <view class="address-full">{{item.fullAddress || item.detail}}</view>
+        <view class="address-actions">
+          <view
+            wx:if="{{!item.isDefault}}"
+            class="address-action"
+            data-id="{{item.id}}"
+            catchtap="onSetDefault"
+          >设为默认</view>
+          <view class="address-action" data-id="{{item.id}}" catchtap="onEdit">编辑</view>
+          <view class="address-action address-action-danger" data-id="{{item.id}}" catchtap="onDelete">删除</view>
+          <view wx:if="{{selectMode}}" class="address-select-hint">选择 ›</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="fixed-bottom add-address-bar">
+    <button class="btn btn-primary btn-block" bindtap="onAdd">新增收货地址</button>
+  </view>
+</view>

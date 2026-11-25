@@ -1,0 +1,167 @@
+.orders-hero {
+  padding-bottom: 34rpx;
+}
+
+.orders-hero .hero-title {
+  margin-top: 20rpx;
+  font-size: 46rpx;
+}
+
+.orders-body {
+  padding-top: 18rpx;
+}
+
+.status-scroll {
+  margin-bottom: 22rpx;
+}
+
+.status-tabs {
+  padding-bottom: 2rpx;
+}
+
+.status-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 62rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #e8e1d9;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 23rpx;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-tab-active {
+  border-color: #1f2937;
+  background: #1f2937;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 8rpx 20rpx rgba(31, 41, 55, 0.16);
+}
+
+.order-card {
+  padding: 22rpx;
+  margin-bottom: 18rpx;
+}
+
+.order-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.order-number {
+  font-size: 24rpx;
+  font-weight: 600;
+  letter-spacing: 0.5rpx;
+  color: #4b5563;
+}
+
+.order-time {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #9ca3af;
+}
+
+.order-type {
+  display: inline-block;
+  margin-left: 8rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 999rpx;
+  background: #f8f4ee;
+  color: #9a6b4f;
+  font-size: 18rpx;
+}
+
+.order-divider {
+  margin: 16rpx 0;
+}
+
+.order-main {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.order-thumb {
+  flex-shrink: 0;
+  width: 112rpx;
+  height: 112rpx;
+}
+
+.order-info {
+  min-width: 0;
+}
+
+.order-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 26rpx;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #1f2937;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.order-meta {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #9ca3af;
+}
+
+.order-amount {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.order-amount-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.order-detail-hint {
+  margin-top: 6rpx;
+  font-size: 19rpx;
+  color: #b45309;
+}
+
+.order-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12rpx;
+  margin-top: 18rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f3efe9;
+}
+
+.order-view {
+  font-size: 20rpx;
+  color: #9ca3af;
+  padding-left: 6rpx;
+}
+
+.orders-empty {
+  padding-top: 110rpx;
+}
+
+.empty-action {
+  margin-top: 26rpx;
+}
+
+.retry-btn {
+  margin-top: 24rpx;
+}
+
+.orders-end {
+  padding: 30rpx 0 16rpx;
+  text-align: center;
+  font-size: 20rpx;
+  color: #b0b4ba;
+}

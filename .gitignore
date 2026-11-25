@@ -1,0 +1,47 @@
+# ===== Java / Maven =====
+/backend/**/target/
+*.class
+/backend/.mvn/wrapper/maven-wrapper.jar
+
+# 部署包里的后端 jar 属于构建产物（>100MB，不入库）
+/deploy/package/*.jar
+
+# ===== Gradle / Android =====
+/android-app/.gradle/
+/android-app/**/build/
+/android-app/.kotlin/
+/android-app/local.properties
+/android-app/captures/
+/android-app/.cxx/
+*.aab
+*.iml
+
+# ===== Node =====
+node_modules/
+/miniprogram/node_modules/
+
+# ===== IDE / 编辑器 =====
+.idea/
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+.sts4-cache
+.apt_generated
+*.ipr
+*.iws
+
+# ===== 运行产物 =====
+/backend/logs/
+/backend/uploads/
+/deploy/logs/
+/nginx/logs/
+*.log
+app-*.log
+*.pid
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
+desktop.ini

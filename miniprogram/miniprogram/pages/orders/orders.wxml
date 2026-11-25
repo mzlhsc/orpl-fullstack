@@ -1,0 +1,109 @@
+<view class="page page-tab orders-page">
+  <view class="hero orders-hero">
+    <view class="hero-inner">
+      <view class="brand-line">
+        <view class="brand"><view class="brand-dot"></view>ORDER ARCHIVE</view>
+        <view class="pill pill-open">{{total}} 单</view>
+      </view>
+      <view class="hero-title">我的订单</view>
+      <view class="hero-subtitle">每一单，都在认真准备。</view>
+    </view>
+  </view>
+
+  <view class="page-pad orders-body">
+    <scroll-view class="scroll-x status-scroll" scroll-x show-scrollbar="{{false}}">
+      <view class="scroll-x-inner status-tabs">
+        <view
+          wx:for="{{statusTabs}}"
+          wx:key="value"
+          class="status-tab {{activeStatus === item.value ? 'status-tab-active' : ''}}"
+          data-value="{{item.value}}"
+          bindtap="onStatusTap"
+        >{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{loading}}" class="loading-line">正在整理订单…</view>
+
+    <block wx:elif="{{error}}">
+      <view class="empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">订单没加载出来</view>
+        <view class="empty-text">{{error}}</view>
+        <button class="btn btn-primary btn-sm retry-btn" bindtap="onRetry">重新加载</button>
+      </view>
+    </block>
+
+    <block wx:elif="{{orders.length === 0}}">
+      <view class="empty orders-empty">
+        <view class="empty-art"></view>
+        <view class="empty-title">这里还没有订单</view>
+        <view class="empty-text">点一份热气腾腾的饭，让今天有点期待。</view>
+        <button class="btn btn-primary btn-sm empty-action" bindtap="goMenu">去点餐</button>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view
+        wx:for="{{orders}}"
+        wx:key="id"
+        class="order-card card"
+        data-id="{{item.id}}"
+        bindtap="onOrderTap"
+      >
+        <view class="order-head">
+          <view class="order-number">#{{item.number}}</view>
+          <view class="tag tag-{{item.statusTone}}">{{item.statusText}}</view>
+        </view>
+        <view class="order-time">{{item.timeText}} <text wx:if="{{item.orderType === 2}}" class="order-type">堂食</text></view>
+
+        <view class="divider order-divider"></view>
+
+        <view class="order-main">
+          <view class="thumb thumb-sm order-thumb">
+            <image
+              class="thumb-img"
+              src="{{item.firstImage}}"
+              mode="aspectFill"
+              data-index="{{index}}"
+              binderror="onOrderImageError"
+            />
+          </view>
+          <view class="grow order-info">
+            <view class="order-summary">{{item.summary}}</view>
+            <view class="order-meta">共 {{item.itemCount}} 件 · {{item.orderType === 2 ? '堂食' : '外卖'}}</view>
+          </view>
+          <view class="order-amount">
+            <view class="order-amount-value">¥{{item.amountText}}</view>
+            <view class="order-detail-hint">明细 ›</view>
+          </view>
+        </view>
+
+        <view class="order-actions">
+          <button
+            wx:if="{{item.canCancel}}"
+            class="btn btn-ghost btn-sm"
+            data-id="{{item.id}}"
+            catchtap="onCancel"
+          >取消订单</button>
+          <button
+            wx:if="{{item.canRemind}}"
+            class="btn btn-soft btn-sm"
+            data-id="{{item.id}}"
+            catchtap="onRemind"
+          >催一催</button>
+          <button
+            wx:if="{{item.canRepeat}}"
+            class="btn btn-soft btn-sm"
+            data-id="{{item.id}}"
+            catchtap="onRepeat"
+          >再来一单</button>
+          <view class="order-view" data-id="{{item.id}}">查看详情 ›</view>
+        </view>
+      </view>
+
+      <view wx:if="{{loadingMore}}" class="loading-line">加载更多…</view>
+      <view wx:elif="{{!hasMore && orders.length > 0}}" class="orders-end">已经到底啦</view>
+    </block>
+  </view>
+</view>

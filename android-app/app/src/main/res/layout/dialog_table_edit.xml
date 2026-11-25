@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="20dp">
+
+    <EditText
+        android:id="@+id/et_name"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:hint="桌台名称，如 A01"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/et_seats"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="10dp"
+        android:hint="座位数"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <EditText
+        android:id="@+id/et_area"
+        style="@style/Widget.Orpl.Input"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/input_height"
+        android:layout_marginTop="10dp"
+        android:hint="区域，如大厅 / 包间"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/Text.Orpl.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="允许顾客预约"
+            android:textSize="13.5sp" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/sw_reservation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

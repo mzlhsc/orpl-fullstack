@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 品牌色，对齐 nginx/html/admin/css/app.css 中的 :root 变量 -->
+    <color name="brand">#E8552D</color>
+    <color name="brand_strong">#C9431F</color>
+    <color name="brand_soft">#FFF0EB</color>
+    <color name="brand_line">#FFD9CD</color>
+    <color name="brand_light">#F4774F</color>
+
+    <color name="ink">#1F2937</color>
+    <color name="ink_2">#374151</color>
+    <color name="muted">#6B7280</color>
+    <color name="muted_2">#9CA3AF</color>
+
+    <color name="bg">#F4F5F7</color>
+    <color name="card">#FFFFFF</color>
+    <color name="line">#E5E7EB</color>
+    <color name="line_soft">#F0F1F3</color>
+
+    <color name="sidebar">#18222D</color>
+    <color name="sidebar_2">#202D3A</color>
+    <color name="sidebar_3">#2C3A49</color>
+    <color name="sidebar_deep">#141D26</color>
+
+    <color name="success">#16803C</color>
+    <color name="success_soft">#E9F7EE</color>
+    <color name="success_dot">#35C46A</color>
+    <color name="warn">#B45309</color>
+    <color name="warn_soft">#FFF7E6</color>
+    <color name="danger">#C62828</color>
+    <color name="danger_soft">#FDECEC</color>
+    <color name="danger_line">#F3C6C6</color>
+    <color name="info">#0E7490</color>
+    <color name="info_soft">#E8F6F9</color>
+    <color name="slate_soft">#F0F2F5</color>
+    <color name="slate">#52606D</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="scrim">#66111827</color>
+
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_55">#8CFFFFFF</color>
+    <color name="white_20">#33FFFFFF</color>
+</resources>

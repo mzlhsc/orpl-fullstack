@@ -1,0 +1,7 @@
+com.mzlhsc.orpl.common.config.CommonAutoConfiguration
+com.mzlhsc.orpl.common.config.WebMvcConfig
+com.mzlhsc.orpl.common.config.RedisConfiguration
+com.mzlhsc.orpl.common.config.RedissonConfiguration
+com.mzlhsc.orpl.common.config.MybatisConfig
+com.mzlhsc.orpl.common.config.PropertiesAutoConfiguration
+com.mzlhsc.orpl.auth.config.JwtAutoConfiguration

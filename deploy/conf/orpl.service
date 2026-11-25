@@ -1,0 +1,35 @@
+[Unit]
+Description=Order Platform backend (Spring Boot 4 / Java 25)
+Documentation=file:/opt/orpl/README.md
+After=network-online.target mysql.service redis-server.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=orpl
+Group=orpl
+WorkingDirectory=/opt/orpl
+
+# 数据库 / Redis / 微信 / OSS 等敏感配置
+EnvironmentFile=/opt/orpl/conf/orpl.env
+
+ExecStart=/usr/lib/jvm/temurin-25-jdk-amd64/bin/java \
+  -Xms256m -Xmx512m -XX:+UseSerialGC \
+  -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai \
+  -jar /opt/orpl/app/orpl-service.jar \
+  --spring.profiles.active=prod \
+  --spring.config.additional-location=file:/opt/orpl/conf/
+
+# 应用收到 SIGTERM 正常退出返回 143
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+
+StandardOutput=append:/opt/orpl/logs/app.log
+StandardError=append:/opt/orpl/logs/app.err.log
+
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
